@@ -23,6 +23,11 @@ Route::get('/test', function ()
     echo 'get web test';
 });
 
+/*
+|--------------------------------------------------------------------------
+| 测试mongodb
+|--------------------------------------------------------------------------
+*/
 Route::get('/mongo_insert', function (Request $request)
 {
 	$data = $request->all();
@@ -119,4 +124,61 @@ Route::get('/mongouser_query', function (Request $request)
 			//$user->save();
 		}		
 	}
+});
+
+/*
+|--------------------------------------------------------------------------
+| 测试redis
+|--------------------------------------------------------------------------
+*/
+Route::get('/setredis', function (Request $request)
+{
+	$data = $request->all();
+	$validator = Validator::make($data, [
+		'key' => 'required|string',
+		'value' => 'required|string',
+	]);
+	if ($validator->fails())
+	{
+		echo "参数错误";
+		return;
+	}
+    Redis::set($data['key'], $data['value']);
+});
+
+Route::get('/getredis', function (Request $request)
+{
+	$data = $request->all();
+	$validator = Validator::make($data, [
+		'key' => 'required|string',
+	]);
+	if ($validator->fails())
+	{
+		echo "参数错误";
+		return;
+	}
+    echo Redis::get($data['key']);
+});
+
+Route::get('/redis_set', function ()
+{
+	$redis = app('redis.connection');
+	$redis->sadd('set1', 'ab');
+	$redis->sadd('set1', 'cd');
+	$redis->sadd('set1', 'ef');
+	echo "set1: " . json_encode($redis->smembers('set1')) . "<br/>";
+
+	$redis->sadd('set2', 'ab');
+	$redis->sadd('set2', 'uv');
+	$redis->sadd('set2', 'xy');
+	echo "set2: " . json_encode($redis->smembers('set2')) . "<br/>";
+
+	echo "set_inter: " . json_encode($redis->sinter('set1', 'set2')) . "<br/>";
+	echo "set_union: " . json_encode($redis->sunion('set1', 'set2')) . "<br/>";
+	echo "set_diff: " . json_encode($redis->sdiff('set1', 'set2')) . "<br/>";
+
+	$redis->del('set1');
+	echo "after del, set1: " . json_encode($redis->smembers('set1')) . "<br/>";
+
+	echo "set_donot_exist: " . json_encode($redis->smembers('set_donot_exist')) . "<br/>";
 });
