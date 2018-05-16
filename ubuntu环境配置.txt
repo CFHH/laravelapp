@@ -1,0 +1,230 @@
+工具使用
+	打开一个新的terminal标签的快捷键：ctrl+shift+t
+	连接其他的ubuntu：ssh fct@192.168.1.125
+	FTP的使用：
+		cd到想要保存文件的位置
+		sftp fct$192.168.1.125
+		get 远程文件的路径文件名 本地文件名
+
+
+sudo不能打开GUI程序
+	gedit ~/.bashrc
+	末尾添加xhost +
+	source ~/.bashrc
+
+
+开机不执行脚本/etc/rc.local
+	创建文件 /etc/systemd/system/rc-local.service
+	复制以下内容
+		[Unit]
+		 Description=/etc/rc.local Compatibility
+		 ConditionPathExists=/etc/rc.local
+		 
+		[Service]
+		 Type=forking
+		 ExecStart=/etc/rc.local start
+		 TimeoutSec=0
+		 StandardOutput=tty
+		 RemainAfterExit=yes
+		 SysVStartPriority=99
+		  
+		[Install]
+		 WantedBy=multi-user.target
+	执行sudo systemctl enable rc-local.service
+
+
+下载安装xampp和laravel
+	http://wiki.ubuntu.org.cn/Xampp
+	https://www.cnblogs.com/ido321/archive/2014/11/27/4126195.html
+安装：
+	sudo chmod 755 ./xampp-linux-x64-7.2.4-0-installer.run
+	sudo ./xampp-linux-x64-7.2.4-0-installer.run
+	安装完之后，如果想用GUI版的XAMPP，下次启动请如下操作
+		cd /opt/lampp
+		sudo ./manager-linux-x64.run
+	创建一个文件chmod_laravel.sh，放～目录下，给执行权限，以后的laravel工程目录，都需要执行一次
+		#!/bin/sh
+		chmod -R 777 ~/laravelapp/storage
+		chmod -R 777 ~/laravelapp/bootstrap
+	各配置文件目录：
+		Apache文档根目录：/opt/lampp/htdocs/
+		Apache配置文件：/opt/lampp/etc/httpd.conf
+		MySQL配置文件：/opt/lampp/etc/my.cnf
+		PHP配置文件：/opt/lampp/etc/php.ini
+		ProFTPD配置文件：/opt/lampp/etc/proftpd.conf
+		PHPMyadmin配置文件：/opt/lampp/phpmyadmin/config.inc.php
+	常用XAMPP命令（在终端以root输入）：
+		启动/停止/重启Apache：/opt/lampp/lampp start/stop/restart(包括启动/停止/重启了mysql,proftpd)
+		安全设置：/opt/lampp/lampp  security
+		使用php版本/查看版本：/opt/lampp/lampp php4(5)/phpstatus
+		只启动和停止Apache：/opt/lampp/lampp startapache/stopapache
+		只启动和停止MySQL：/opt/lampp/lampp startmysql/stopmysql
+		只启动和停止ProFTPD服务器：/opt/lampp/lampp startftp/stopftp
+		启动和停止Apache的SSL支持：/opt/lampp/lampp startssl/stopssl
+		卸载XAMPP：rm –rf /opt/lampp
+设置Xampp为开机启动
+	1. 在/etc/init.d 目錄下建立lampp.sh 文件，然后添加以下内容：
+		#!/bin/sh
+		/opt/lampp/lampp start
+		service mongod start
+	2. chmod 755 /etc/init.d/lampp.sh
+	3. 编辑/etc/rc.local在最后一行加上：
+	   	sh /etc/init.d/lampp.sh
+		或者
+		exec /etc/init.d/lampp.sh  (注：这种方法即使开机后没有登入，XAMPP还是会启动)
+安装PHP开发包（不使用phpize就不需要）
+	sudo gedit /etc/apt/sources.list
+		添加 deb http://security.ubuntu.com/ubuntu xenial-security main
+	sudo apt-get install php7.0-dev
+添加环境变量（为什么要加两处？为了避免和php开发包冲突，添加在path的开头）
+	sudo gedit /etc/profile
+		添加 export PATH=/opt/lampp/bin:$PATH
+	sudo gedit ~/.bashrc
+		添加 export PATH=/opt/lampp/bin:$PATH
+	source /etc/profile
+	source ~/.bashrc
+	测试 echo $PATH
+安装composer
+	sudo apt-get update
+	sudo apt-get install wget
+	wget https://getcomposer.org/composer.phar
+	mv composer.phar composer
+	chmod +x composer
+	sudo mv composer /usr/local/bin
+	测试安装成功 composer -v
+全局安装laravel并写入环境变量
+	composer global require "laravel/installer"
+	测试安装成功
+		cd /home/zzw/.config/composer/vendor/bin
+		./laravel -v
+	sudo gedit /etc/profile
+		添加 export PATH=$PATH:/home/zzw/.config/composer/vendor/bin
+	sudo gedit ~/.bashrc
+		添加 export PATH=$PATH:/home/zzw/.config/composer/vendor/bin
+	source /etc/profile
+	source ~/.bashrc
+创建第一个应用
+	cd ~
+	laravel new laravelapp
+	chmod -R 777 ~/laravelapp/storage
+	chmod -R 777 ~/laravelapp/bootstrap
+配置apache, mysql, php
+	修改apcahe的/opt/lampp/etc/httpd.conf
+		把/opt/lampp/htdocs改成/home/zzw/laravelapp/public
+	给musql设置密码（新密码是123456）
+		mysqladmin -u root -p password，然后按步骤先输原密码（无），然后输两遍新密码
+	修改phpMyadmin的/opt/lampp/phpmyadmin/config.inc.php
+		http://localhost/phpmyadmin/
+	创建新的DB：laravelapp
+	修改PHP：增加mongodb extension
+		需要先编译libssl.so.1.1和libcrypto.so.1.1（怎么下载和编，没研究）
+		然后 pecl install mongodb，或者使用如下的原始方式
+			donwnload http://pecl.php.net/package/mongodb
+			tar zxvf mongodb-1.4.3.tgz
+			cd mongodb-1.4.3.tgz
+			phpize
+			./configure
+			make
+			make test
+			sudo make install
+		在/opt/lampp/etc/php.ini增加一行extension=mongodb.so
+		安装完保存在/opt/lampp/lib/php/extensions/no-debug-non-zts-20170718/mongodb.so
+		验证phpinfo中搜索mongo
+	如果在内网测试机，希望别人能访问phpmyadmin，则打开/opt/lampp/etc/extra/httpd-xampp.conf
+		找到phpmyadmin，修改Require local为Require all granted
+安装passport
+	cd ~/laravelapp/
+	composer require laravel/passport
+	php artisan migrate
+	php artisan passport:install
+
+
+mongodb数据库
+安装
+	sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
+	echo "deb [ arch=amd64,arm64 ] http://mirrors.aliyun.com/mongodb/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+	sudo apt-get update
+	sudo apt-get install -y mongodb-org或者sudo apt-get install -y mongodb-org=3.6.2 mongodb-org-server=3.6.2 mongodb-org-shell=3.6.2 mongodb-org-mongos=3.6.2 mongodb-org-tools=3.6.2
+	如果没有则手动新建/lib/systemd/system/mongod.service
+	自动启动，在lampp.sh中增加service mongod start
+命令行启动
+	sudo service mongod start
+	sudo service mongod restart
+	sudo service mongod stop
+卸载
+	sudo apt-get purge mongodb-org*
+	sudo rm -r /var/log/mongodb
+	sudo rm -r /var/lib/mongodb
+客户端操作
+	mongo
+	use laravelapp
+	db.tests.find()
+Laravel支持：
+	对应的mongodb的PHP的扩展及相关so已经拷贝
+windows服务
+	安装时，如果打钩compass可能安装不成功
+	假设安装在E:\MongoDB
+	创建文件夹E:\MongoDB\logs，E:\MongoDB\data\db
+	mongod.exe --logpath E:\MongoDB\logs\mongodb.log --logappend --dbpath E:\MongoDB\data\db --directoryperdb --serviceName MongoDB --install
+	E:\MongoDB\Server\3.6\bin\mongod.exe --remove
+
+
+redis缓存：
+安装
+	sudo apt-get install redis-server
+	装完会自动启动
+	默认会自动存数据到硬盘，开机启动数据还在，可以改配置/etc/redis/redis.conf，删除rdb文件
+客户端操作
+	redis-cli
+	set key1 "hello"
+	get key1
+Laravel支持
+	composer require predis/predis
+
+
+Apache多站点(单IP多端口)
+	修改/opt/lampp/etc/httpd.conf
+		添加 Listen 8080
+		打开 #LoadModule vhost_alias_module modules/mod_vhost_alias.so
+		打开 #Include conf/extra/httpd-vhosts.conf
+		增加新网站目录
+			<Directory "E:/xampp/htdocs">
+				Options Indexes FollowSymLinks Includes ExecCGI
+				AllowOverride All
+				Require all granted
+			</Directory>
+	编辑/opt/lampp/etc/extra/httpd-vhosts.conf文件，增加
+		<VirtualHost *:80>
+			ServerAdmin 13436361@qq.com
+			DocumentRoot "E:/laravelapp/public"
+			ServerName localhost:80
+			ErrorLog "logs/localhost-80-error.log"
+			CustomLog "logs/localhost-80-access.log" common
+		</VirtualHost>
+
+		<VirtualHost *:8080>
+			ServerAdmin 13436361@qq.com
+			DocumentRoot "E:/xampp/htdocs"
+			ServerName localhost:8080
+			ErrorLog "logs/localhost-8080-error.log"
+			CustomLog "logs/localhost-8080-access.log" common
+		</VirtualHost>
+
+
+Cron
+	查看cron状态：sudo service cron status
+	启动cron：sudo /etc/init.d/cron start
+	关闭cron：sudo /etc/init.d/cron stop	
+	重启cron：sudo /etc/init.d/cron restart	
+
+
+
+连接Windows的共享文件夹
+	sudo apt-get install smbclient
+	sudo apt-get install cifs-utils
+	sudo mkdir /mnt/share
+	以后每次启动执行
+		sudo mount -t cifs -o username=Administrator //192.168.1.188/share /mnt/share
+
+
+
