@@ -182,3 +182,47 @@ Route::get('/redis_set', function ()
 
 	echo "set_donot_exist: " . json_encode($redis->smembers('set_donot_exist')) . "<br/>";
 });
+
+/*
+|--------------------------------------------------------------------------
+| 安全性
+|--------------------------------------------------------------------------
+*/
+Route::get('/xss_test', function ()
+{
+	$input = "<p><script>alert('Laravel);</script></p>";
+	$content = htmlentities($input, ENT_QUOTES, 'UTF-8');
+	echo $content;
+});
+
+Route::get('/sql_test', function ()
+{
+	//$sql = 'UPDATE users SET password = "hahaha111" WHERE id_crc64 = -7858747494977956003';
+	//$sql = sprintf('UPDATE users SET password = "%s" WHERE id_crc64 = -7858747494977956003', $password);
+	//$sql = sprintf('UPDATE users SET password = "%s" WHERE id_crc64 = %d', $password, $crc);
+
+	$crc = \CRC::crc64('zzw@163.com');
+	$inject_crc = "-7858747494977956003 or 1 = 1";
+	$password = 'haha666';
+
+	$sql_injection = false;
+	$pdo = true;
+	if ($sql_injection)
+	{
+		//sql注入
+		$sql = sprintf('UPDATE users SET password = "%s" WHERE id_crc64 = %s', $password, $inject_crc);
+		DB::statement($sql);
+		echo $sql;
+	}
+	else if ($pdo)
+	{
+		//使用PDO查询
+		$sql = sprintf('UPDATE users SET password = ? WHERE id_crc64 = ?');
+		DB::statement($sql, array($password, $inject_crc));
+	}
+	else
+	{
+		//使用Eloquent
+		User::find($inject_crc)->update(['password'=>bcrypt("123456")]);
+	}
+});
