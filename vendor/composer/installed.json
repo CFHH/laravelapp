@@ -1672,6 +1672,69 @@
         ]
     },
     {
+        "name": "moloquent/moloquent",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/moloquent/moloquent.git",
+            "reference": "c24deb4e63c57f6f6ae7926ddeac1a6f4faddf24"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/moloquent/moloquent/zipball/c24deb4e63c57f6f6ae7926ddeac1a6f4faddf24",
+            "reference": "c24deb4e63c57f6f6ae7926ddeac1a6f4faddf24",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/container": "^5.1",
+            "illuminate/database": "^5.1",
+            "illuminate/events": "^5.1",
+            "illuminate/support": "^5.1",
+            "mongodb/mongodb": "^1.0.0"
+        },
+        "require-dev": {
+            "laravel/passport": "^1.0",
+            "mockery/mockery": "^0.9",
+            "orchestra/testbench": "^3.1",
+            "phpunit/phpunit": "^4.0|^5.0",
+            "satooshi/php-coveralls": "^0.6"
+        },
+        "time": "2017-09-21T12:06:57+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Moloquent\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jens Segers",
+                "homepage": "https://jenssegers.com"
+            },
+            {
+                "name": "Moloquent",
+                "homepage": "https://moloquent.github.io"
+            }
+        ],
+        "description": "A MongoDB based Eloquent model and Query builder for Laravel (Moloquent)",
+        "homepage": "https://github.com/moloquent/moloquent",
+        "keywords": [
+            "database",
+            "eloquent",
+            "laravel",
+            "model",
+            "moloquent",
+            "mongo",
+            "mongodb"
+        ]
+    },
+    {
         "name": "mongodb/mongodb",
         "version": "1.3.2",
         "version_normalized": "1.3.2.0",
