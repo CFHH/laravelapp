@@ -15,11 +15,11 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
-        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
     );
 
@@ -86,7 +86,6 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         array (
             'Monolog\\' => 8,
             'MongoDB\\' => 8,
-            'Moloquent\\' => 10,
         ),
         'L' => 
         array (
@@ -270,10 +269,6 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         'MongoDB\\' => 
         array (
             0 => __DIR__ . '/..' . '/mongodb/mongodb/src',
-        ),
-        'Moloquent\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/moloquent/moloquent/src',
         ),
         'League\\OAuth2\\Server\\' => 
         array (
@@ -2235,44 +2230,6 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         'Mockery\\Undefined' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Undefined.php',
         'Mockery\\VerificationDirector' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/VerificationDirector.php',
         'Mockery\\VerificationExpectation' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/VerificationExpectation.php',
-        'Moloquent\\Auth\\DatabaseTokenRepository' => __DIR__ . '/..' . '/moloquent/moloquent/src/Auth/DatabaseTokenRepository.php',
-        'Moloquent\\Auth\\PasswordBrokerManager' => __DIR__ . '/..' . '/moloquent/moloquent/src/Auth/PasswordBrokerManager.php',
-        'Moloquent\\Auth\\PasswordResetServiceProvider' => __DIR__ . '/..' . '/moloquent/moloquent/src/Auth/PasswordResetServiceProvider.php',
-        'Moloquent\\Auth\\User' => __DIR__ . '/..' . '/moloquent/moloquent/src/Auth/User.php',
-        'Moloquent\\Collection' => __DIR__ . '/..' . '/moloquent/moloquent/src/Collection.php',
-        'Moloquent\\Connection' => __DIR__ . '/..' . '/moloquent/moloquent/src/Connection.php',
-        'Moloquent\\Eloquent\\Builder' => __DIR__ . '/..' . '/moloquent/moloquent/src/Eloquent/Builder.php',
-        'Moloquent\\Eloquent\\HybridRelations' => __DIR__ . '/..' . '/moloquent/moloquent/src/Eloquent/HybridRelations.php',
-        'Moloquent\\Eloquent\\Model' => __DIR__ . '/..' . '/moloquent/moloquent/src/Eloquent/Model.php',
-        'Moloquent\\Eloquent\\SoftDeletes' => __DIR__ . '/..' . '/moloquent/moloquent/src/Eloquent/SoftDeletes.php',
-        'Moloquent\\MongodbQueueServiceProvider' => __DIR__ . '/..' . '/moloquent/moloquent/src/MongodbQueueServiceProvider.php',
-        'Moloquent\\MongodbServiceProvider' => __DIR__ . '/..' . '/moloquent/moloquent/src/MongodbServiceProvider.php',
-        'Moloquent\\Passport\\AuthCode' => __DIR__ . '/..' . '/moloquent/moloquent/src/Passport/AuthCode.php',
-        'Moloquent\\Passport\\Client' => __DIR__ . '/..' . '/moloquent/moloquent/src/Passport/Client.php',
-        'Moloquent\\Passport\\PassportServiceProvider' => __DIR__ . '/..' . '/moloquent/moloquent/src/Passport/PassportServiceProvider.php',
-        'Moloquent\\Passport\\PersonalAccessClient' => __DIR__ . '/..' . '/moloquent/moloquent/src/Passport/PersonalAccessClient.php',
-        'Moloquent\\Passport\\Token' => __DIR__ . '/..' . '/moloquent/moloquent/src/Passport/Token.php',
-        'Moloquent\\Query\\Builder' => __DIR__ . '/..' . '/moloquent/moloquent/src/Query/Builder.php',
-        'Moloquent\\Query\\Grammar' => __DIR__ . '/..' . '/moloquent/moloquent/src/Query/Grammar.php',
-        'Moloquent\\Query\\Processor' => __DIR__ . '/..' . '/moloquent/moloquent/src/Query/Processor.php',
-        'Moloquent\\Queue\\Failed\\MongoFailedJobProvider' => __DIR__ . '/..' . '/moloquent/moloquent/src/Queue/Failed/MongoFailedJobProvider.php',
-        'Moloquent\\Queue\\MongoConnector' => __DIR__ . '/..' . '/moloquent/moloquent/src/Queue/MongoConnector.php',
-        'Moloquent\\Queue\\MongoJob' => __DIR__ . '/..' . '/moloquent/moloquent/src/Queue/MongoJob.php',
-        'Moloquent\\Queue\\MongoQueue' => __DIR__ . '/..' . '/moloquent/moloquent/src/Queue/MongoQueue.php',
-        'Moloquent\\Relations\\BelongsTo' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/BelongsTo.php',
-        'Moloquent\\Relations\\BelongsToMany' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/BelongsToMany.php',
-        'Moloquent\\Relations\\EmbedsMany' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/EmbedsMany.php',
-        'Moloquent\\Relations\\EmbedsOne' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/EmbedsOne.php',
-        'Moloquent\\Relations\\EmbedsOneOrMany' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/EmbedsOneOrMany.php',
-        'Moloquent\\Relations\\HasMany' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/HasMany.php',
-        'Moloquent\\Relations\\HasOne' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/HasOne.php',
-        'Moloquent\\Relations\\HasOneOrManyTrait' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/HasOneOrManyTrait.php',
-        'Moloquent\\Relations\\MorphMany' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/MorphMany.php',
-        'Moloquent\\Relations\\MorphOne' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/MorphOne.php',
-        'Moloquent\\Relations\\MorphTo' => __DIR__ . '/..' . '/moloquent/moloquent/src/Relations/MorphTo.php',
-        'Moloquent\\Schema\\Blueprint' => __DIR__ . '/..' . '/moloquent/moloquent/src/Schema/Blueprint.php',
-        'Moloquent\\Schema\\Builder' => __DIR__ . '/..' . '/moloquent/moloquent/src/Schema/Builder.php',
-        'Moloquent\\Schema\\Grammar' => __DIR__ . '/..' . '/moloquent/moloquent/src/Schema/Grammar.php',
         'MongoDB\\BulkWriteResult' => __DIR__ . '/..' . '/mongodb/mongodb/src/BulkWriteResult.php',
         'MongoDB\\ChangeStream' => __DIR__ . '/..' . '/mongodb/mongodb/src/ChangeStream.php',
         'MongoDB\\Client' => __DIR__ . '/..' . '/mongodb/mongodb/src/Client.php',

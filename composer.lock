@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca48fcc8b90e3f6d170875927104fb7b",
+    "content-hash": "c1d22d810d44ba45e45b781777ad38e0",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -1344,67 +1344,6 @@
                 "server"
             ],
             "time": "2018-04-22T14:16:23+00:00"
-        },
-        {
-            "name": "moloquent/moloquent",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/moloquent/moloquent.git",
-                "reference": "c24deb4e63c57f6f6ae7926ddeac1a6f4faddf24"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/moloquent/moloquent/zipball/c24deb4e63c57f6f6ae7926ddeac1a6f4faddf24",
-                "reference": "c24deb4e63c57f6f6ae7926ddeac1a6f4faddf24",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/container": "^5.1",
-                "illuminate/database": "^5.1",
-                "illuminate/events": "^5.1",
-                "illuminate/support": "^5.1",
-                "mongodb/mongodb": "^1.0.0"
-            },
-            "require-dev": {
-                "laravel/passport": "^1.0",
-                "mockery/mockery": "^0.9",
-                "orchestra/testbench": "^3.1",
-                "phpunit/phpunit": "^4.0|^5.0",
-                "satooshi/php-coveralls": "^0.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Moloquent\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jens Segers",
-                    "homepage": "https://jenssegers.com"
-                },
-                {
-                    "name": "Moloquent",
-                    "homepage": "https://moloquent.github.io"
-                }
-            ],
-            "description": "A MongoDB based Eloquent model and Query builder for Laravel (Moloquent)",
-            "homepage": "https://github.com/moloquent/moloquent",
-            "keywords": [
-                "database",
-                "eloquent",
-                "laravel",
-                "model",
-                "moloquent",
-                "mongo",
-                "mongodb"
-            ],
-            "time": "2017-09-21T12:06:57+00:00"
         },
         {
             "name": "mongodb/mongodb",
@@ -5005,9 +4944,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "moloquent/moloquent": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
