@@ -227,3 +227,98 @@ Route::get('/sql_test', function ()
 		User::find($inject_crc)->update(['password'=>bcrypt("123456")]);
 	}
 });
+
+/*
+|--------------------------------------------------------------------------
+| 测试mysql的lockForUpdate
+|--------------------------------------------------------------------------
+*/
+Route::get('/testlock0', function ()
+{
+	//这个可以在lockForUpdate时不断访问
+	$user = User::where('id_crc64', '1807203159')->first();
+    echo $user . "<br/>";
+});
+
+Route::get('/testlock1', function ()
+{
+	//在同一个trans里可以重复lock同一条数据
+	DB::transaction(function ()
+	{
+		$user1 = User::where('id_crc64', '1807203159')->lockForUpdate()->first();
+		$user2 = User::where('id_crc64', '1807203159')->lockForUpdate()->first();
+		if (isset($user1))
+		{
+			echo $user1 . "<br/>";
+		}
+		else
+		{
+			echo 'user1 is null';
+		}
+		if (isset($user2))
+		{
+			echo $user2 . "<br/>";
+		}
+		else
+		{
+			echo 'user2 is null';
+		}
+		if (isset($user1) && isset($user2))
+		{
+			$user1->name = 'zhangzw2';
+			$user2->name = 'zhangzw2';
+			$user1->save();
+			$user2->save();
+		}
+	});
+});
+
+Route::get('/testlock2', function ()
+{
+	//这样实际上是锁了整张表？
+	DB::transaction(function ()
+	{
+		$user = User::where('name', 'zhangzw2')->lockForUpdate()->first();
+		if (isset($user))
+		{
+			echo $user . "<br/>";
+			sleep(10);
+			echo 'sleep over' . "<br/>";
+			$user->name = 'zhangzw1';
+			$user->save();
+		}
+		else
+		{
+			echo 'user1 is null';
+		}
+	});
+});
+
+Route::get('/testlock3', function ()
+{
+	//这样实际上也是锁了整张表？
+	DB::transaction(function ()
+	{
+		$users = User::where('name', 'zhangzw2')->limit(1)->lockForUpdate()->get();
+		if (empty($users))
+		{
+			echo 'users is empty';
+		}
+		else
+		{
+			$user = $users[0];
+			if (isset($user))
+			{
+				echo $user . "<br/>";
+				sleep(100);
+				echo 'sleep over' . "<br/>";
+				$user->name = 'zhangzw1';
+				$user->save();
+			}
+			else
+			{
+				echo 'user1 is null';
+			}
+		}
+	});
+});
