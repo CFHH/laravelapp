@@ -2,12 +2,16 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
+
+    protected $primaryKey = 'id_crc64';
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id_crc64', 'email', 'name', 'password',
     ];
 
     /**
@@ -24,6 +28,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
     ];
+
+    public function findForPassport($username)
+    {
+        return $this->where('id_crc64', $username)->first();
+    }
+
+    public function getKeyName()
+    {
+        return 'id_crc64';
+    }
 }

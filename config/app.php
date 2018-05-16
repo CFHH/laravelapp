@@ -150,6 +150,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -211,4 +212,9 @@ return [
 
     ],
 
+    'passport_configs' => [
+        'grant_type' => env("PASSPORT_GRANT_TYPE"),
+        'client_id' => env("PASSPORT_CLIENT_ID"),
+        'client_secret' => env("PASSPORT_CLIENT_SECRET"),
+    ],
 ];
