@@ -10,11 +10,9 @@
 /build/*.phar.asc
 /build/binary-phar-autoload.php
 /cache.properties
-/composer.lock
 /tests/TextUI/*.diff
 /tests/TextUI/*.exp
 /tests/TextUI/*.log
 /tests/TextUI/*.out
 /tests/TextUI/*.php
-/vendor
 
