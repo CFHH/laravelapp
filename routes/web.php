@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Http\Request;
 use App\Model\MongoUser;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
