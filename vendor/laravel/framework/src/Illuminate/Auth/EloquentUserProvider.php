@@ -46,6 +46,7 @@ class EloquentUserProvider implements UserProvider
     {
         $model = $this->createModel();
 
+        /*BY ZZW
         让mongodb支持passport
         */
         if ($model->getKeyType() == 'int')
