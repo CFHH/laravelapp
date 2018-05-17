@@ -46,6 +46,11 @@ class EloquentUserProvider implements UserProvider
     {
         $model = $this->createModel();
 
+        让mongodb支持passport
+        */
+        if ($model->getKeyType() == 'int')
+            $identifier = intval ($identifier);
+
         return $model->newQuery()
             ->where($model->getAuthIdentifierName(), $identifier)
             ->first();

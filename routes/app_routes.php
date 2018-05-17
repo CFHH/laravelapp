@@ -4,13 +4,18 @@ use Illuminate\Http\Request;
 
 Route::get('/test', function (Request $request)
 {
-    return "get app test";
+    echo "get app test";
 });
 
 Route::post('/test', function (Request $request)
 {
-    return "post app test";
+    echo "post app test";
 });
+
+Route::get('/testvft', function (Request $request)
+{
+    echo "get app test vft";
+})->middleware('vpt');
 
 Route::get('/register', 'Auth\ApiAuthController@register');
 

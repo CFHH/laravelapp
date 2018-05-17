@@ -33,6 +33,14 @@ abstract class Model extends BaseModel
     protected $primaryKey = '_id';
 
     /**
+     * BY ZZW
+     * Mongodb对数据类型敏感，并且passport时，默认是string的，因此修改keyType默认是string
+     * 同时，Mondodb不支持自增键，为了避免keyType='int'时，满足自增条件，因此修改incrementing默认是false
+     */
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    /**
      * The parent relation instance.
      *
      * @var Relation

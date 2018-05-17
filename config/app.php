@@ -152,6 +152,7 @@ return [
          */
         Laravel\Passport\PassportServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
+        DesignMyNight\Mongodb\MongodbPassportServiceProvider::class,
 
         /*
          * Application Service Providers...

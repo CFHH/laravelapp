@@ -24,6 +24,17 @@ Route::get('/test', function ()
     echo 'get web test';
 });
 
+Route::get('/testdb', function ()
+{
+	//需要先创建数据
+	//mongo对类型敏感，mysql不敏感
+	$user1 = User::find(1980955020);
+	echo 'User::find(1980955020), ' . $user1 . '<br/>';
+
+	$user2 = User::find("1980955020");
+	echo 'User::find("1980955020"), ' . $user2 . '<br/>';
+});
+
 /*
 |--------------------------------------------------------------------------
 | 测试mongodb
@@ -41,6 +52,7 @@ Route::get('/mongo_insert', function (Request $request)
 		echo "参数错误";
 		return;
 	}
+	//collection改用table也可以
 	DB::connection('mongodb')->collection('tests')->insert([
     	'name' => $data['name'],
     	'age' => $data['age']
