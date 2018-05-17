@@ -15,6 +15,8 @@ class MongodbPassportServiceProvider extends ServiceProvider
         /*
          * Passport client extends Eloquent model by default, so we alias them.
          */
+        if (!config('app.passport_configs.use_mongo'))
+            return;
         if (class_exists('Illuminate\Foundation\AliasLoader')) {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
             $loader->alias('Laravel\Passport\AuthCode', AuthCode::class);
@@ -27,5 +29,6 @@ class MongodbPassportServiceProvider extends ServiceProvider
             class_alias('Laravel\Passport\PersonalAccessClient', PersonalAccessClient::class);
             class_alias('Laravel\Passport\Token', Token::class);
         }
+        
     }
 }

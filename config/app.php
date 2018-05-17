@@ -217,5 +217,6 @@ return [
         'grant_type' => env("PASSPORT_GRANT_TYPE"),
         'client_id' => env("PASSPORT_CLIENT_ID"),
         'client_secret' => env("PASSPORT_CLIENT_SECRET"),
+        'use_mongo' => env("PASSPORT_USE_MONGO"),
     ],
 ];
