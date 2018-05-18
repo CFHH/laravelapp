@@ -15,11 +15,11 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
-        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
     );
 
@@ -121,7 +121,6 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
             'Dotenv\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
-            'DesignMyNight\\Mongodb\\' => 22,
             'Defuse\\Crypto\\' => 14,
             'DeepCopy\\' => 9,
         ),
@@ -339,10 +338,6 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
         ),
-        'DesignMyNight\\Mongodb\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src',
-        ),
         'Defuse\\Crypto\\' => 
         array (
             0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
@@ -482,12 +477,6 @@ class ComposerStaticInit3ec44f165ae29f8661e54c868f1f2adf
         'Defuse\\Crypto\\KeyOrPassword' => __DIR__ . '/..' . '/defuse/php-encryption/src/KeyOrPassword.php',
         'Defuse\\Crypto\\KeyProtectedByPassword' => __DIR__ . '/..' . '/defuse/php-encryption/src/KeyProtectedByPassword.php',
         'Defuse\\Crypto\\RuntimeTests' => __DIR__ . '/..' . '/defuse/php-encryption/src/RuntimeTests.php',
-        'DesignMyNight\\Mongodb\\Auth\\User' => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src/Auth/User.php',
-        'DesignMyNight\\Mongodb\\MongodbPassportServiceProvider' => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src/MongodbPassportServiceProvider.php',
-        'DesignMyNight\\Mongodb\\Passport\\AuthCode' => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src/Passport/AuthCode.php',
-        'DesignMyNight\\Mongodb\\Passport\\Client' => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src/Passport/Client.php',
-        'DesignMyNight\\Mongodb\\Passport\\PersonalAccessClient' => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src/Passport/PersonalAccessClient.php',
-        'DesignMyNight\\Mongodb\\Passport\\Token' => __DIR__ . '/..' . '/designmynight/laravel-mongodb-passport/src/Passport/Token.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'Doctrine\\Common\\Lexer\\AbstractLexer' => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer/AbstractLexer.php',
         'Doctrine\\Instantiator\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/ExceptionInterface.php',

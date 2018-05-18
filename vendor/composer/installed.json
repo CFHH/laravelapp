@@ -65,64 +65,6 @@
         ]
     },
     {
-        "name": "designmynight/laravel-mongodb-passport",
-        "version": "v1.1.3",
-        "version_normalized": "1.1.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/designmynight/laravel-mongodb-passport.git",
-            "reference": "b3725e18f640abc5f9977019a6fa4fe336973aff"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/designmynight/laravel-mongodb-passport/zipball/b3725e18f640abc5f9977019a6fa4fe336973aff",
-            "reference": "b3725e18f640abc5f9977019a6fa4fe336973aff",
-            "shasum": ""
-        },
-        "require": {
-            "illuminate/support": "^5.5",
-            "jenssegers/mongodb": "3.3.* || 3.4.*",
-            "laravel/passport": "4.0.* || 5.0.* || 6.0.*"
-        },
-        "time": "2018-04-24T10:59:05+00:00",
-        "type": "library",
-        "extra": {
-            "laravel": {
-                "providers": [
-                    "DesignMyNight\\Mongodb\\MongodbPassportServiceProvider"
-                ]
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "DesignMyNight\\Mongodb\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Steve Porter",
-                "email": "steve@designmynight.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "A package to allow laravel/passport use with jenssegers/laravel-mongodb",
-        "homepage": "https://github.com/designmynight/laravel-mongodb-passport",
-        "keywords": [
-            "designmynight",
-            "laravel",
-            "laravel-mongodb",
-            "laravel-mongodb-passport",
-            "laravel-passport",
-            "mongodb",
-            "passport"
-        ]
-    },
-    {
         "name": "dnoegel/php-xdg-base-dir",
         "version": "0.1",
         "version_normalized": "0.1.0.0",

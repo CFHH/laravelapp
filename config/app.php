@@ -152,7 +152,6 @@ return [
          */
         Laravel\Passport\PassportServiceProvider::class,
         Jenssegers\Mongodb\MongodbServiceProvider::class,
-        DesignMyNight\Mongodb\MongodbPassportServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -162,7 +161,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\MongodbPassport\MongodbPassportServiceProvider::class,
     ],
 
     /*
@@ -211,7 +210,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
     ],
 
     'passport_configs' => [

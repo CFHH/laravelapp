@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 //use Illuminate\Foundation\Auth\User as Authenticatable; //mysql
-use DesignMyNight\Mongodb\Auth\User as Authenticatable;  //mongo
+use App\MongodbPassport\User as Authenticatable;  //mongo
 
 class User extends Authenticatable
 {
