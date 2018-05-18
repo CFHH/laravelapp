@@ -7,6 +7,7 @@ use App\MongodbPassport\AuthCode;
 use App\MongodbPassport\Client;
 use App\MongodbPassport\PersonalAccessClient;
 use App\MongodbPassport\Token;
+use App\MongodbPassport\User;
 
 /*
 使用说明：
@@ -74,7 +75,7 @@ class User extends Authenticatable
         修改.env
             DB_CONNECTION=mysql
             PASSPORT_USE_MONGO=false
-        修改User.php中use Authenticatable
+        其他都不用改
 */
 
 class MongodbPassportServiceProvider extends ServiceProvider
@@ -91,6 +92,7 @@ class MongodbPassportServiceProvider extends ServiceProvider
             $loader->alias('Laravel\Passport\Client', Client::class);
             $loader->alias('Laravel\Passport\PersonalAccessClient', PersonalAccessClient::class);
             $loader->alias('Laravel\Passport\Token', Token::class);
+            $loader->alias('Illuminate\Foundation\Auth\User', User::class);
         }
         else
         {
@@ -98,6 +100,7 @@ class MongodbPassportServiceProvider extends ServiceProvider
             class_alias('Laravel\Passport\Client', Client::class);
             class_alias('Laravel\Passport\PersonalAccessClient', PersonalAccessClient::class);
             class_alias('Laravel\Passport\Token', Token::class);
+            class_alias('Illuminate\Foundation\Auth\User', User::class);
         }
     }
 }
