@@ -30,8 +30,16 @@ class VerifyPassportToken extends Authenticate
 	           		$identifier = intval ($identifier);
     	*/
         if ($this->auth->guard('api')->check())
-			return $this->auth->shouldUse('api');
+        {
+            /*
+			$user = $this->auth->shouldUse('api');
+            var_dump($user);  //NULL
+            return $user;
+            */
+        }
         else
+        {
 			throw new UnauthorizedHttpException('', 'Unauthenticated');
+        }
     }
 }

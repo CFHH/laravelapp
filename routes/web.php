@@ -35,6 +35,10 @@ Route::get('/testdb', function ()
 	echo 'User::find("1980955020"), ' . $user2 . '<br/>';
 });
 
+Route::get('/crc', function () {
+    echo CRC::crc32f("php");
+});
+
 /*
 |--------------------------------------------------------------------------
 | 测试mongodb
