@@ -28,6 +28,12 @@ class VerifyPassportToken extends Authenticate
 	    		mongodb同列可以不同类型，所以需要处理一下
 	    		if ($model->getKeyType() == 'int')
 	           		$identifier = intval ($identifier);
+        三、这个类，提供了一中定制化的功能，也可以使用middleware('auth:api')代替这里的middleware('vpt')。
+            auth:api如果失败输出如下内容：
+                {
+                    "message": "Unauthenticated."
+                }
+            vpt如果失败，内容可以自定义，在App\Exceptions\Handler::render()里修改
     	*/
         if ($this->auth->guard('api')->check())
         {
@@ -39,7 +45,7 @@ class VerifyPassportToken extends Authenticate
         }
         else
         {
-			throw new UnauthorizedHttpException('', 'Unauthenticated');
+			throw new UnauthorizedHttpException('', 'NO PASSPORT AUTH.');
         }
     }
 }
