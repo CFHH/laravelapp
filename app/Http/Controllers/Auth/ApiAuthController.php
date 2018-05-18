@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
+use Laravel\Passport\Client;
 
 class ApiAuthController extends Controller
 {
@@ -49,14 +50,30 @@ class ApiAuthController extends Controller
     {
         $crc = \CRC::crc64($request->input('email'));
 
-        $request->request->add([
-            'grant_type' => config('app.passport_configs.grant_type'),
-            'client_id' => config('app.passport_configs.client_id'),
-            'client_secret' => config('app.passport_configs.client_secret'),
-            'username' => $crc,
-            'password' => $request->input('password'),
-            'scope' => ''
-        ]);
+        $use_config = false;
+        if ($use_config)
+        {
+            $request->request->add([
+                'grant_type' => config('app.passport_configs.grant_type'),
+                'client_id' => config('app.passport_configs.client_id'),
+                'client_secret' => config('app.passport_configs.client_secret'),
+                'username' => $crc,
+                'password' => $request->input('password'),
+                'scope' => ''
+            ]); 
+        }
+        else
+        {
+            $oauth_client = Client::where('password_client', true)->get()->first();
+            $request->request->add([
+                'grant_type' => 'password',
+                'client_id' => $oauth_client->_id,
+                'client_secret' => $oauth_client->secret,
+                'username' => $crc,
+                'password' => $request->input('password'),
+                'scope' => ''
+            ]);
+        }
 
         $proxy = Request::create(
             'oauth/token',

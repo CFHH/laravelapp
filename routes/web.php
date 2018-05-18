@@ -2,7 +2,6 @@
 use Illuminate\Http\Request;
 use App\Model\MongoUser;
 use App\User;
-use App\Model\Passport\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +22,6 @@ Route::get('/', function () {
 Route::get('/test', function ()
 {
     echo 'get web test';
-    $client = Client::find("5afbff6eae05a4032c0058c4");
-    echo $client;
 });
 
 Route::get('/testdb', function ()
