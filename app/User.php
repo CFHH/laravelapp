@@ -2,17 +2,18 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-//use Illuminate\Foundation\Auth\User as Authenticatable; //mysql
+//use Illuminate\Foundation\Auth\User as Authenticatable;  //mysql
 use App\MongodbPassport\User as Authenticatable;  //mongo
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     protected $primaryKey = 'id_crc64';
-    protected $keyType = 'int';  //mongo需要设置
-    public $incrementing = false; //mysql需要设置
+    protected $keyType = 'int';  //如果主键是整数，mongo必须设置
+    public $incrementing = false; //mysql必须设置
 
     /**
      * The attributes that are mass assignable.

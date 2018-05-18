@@ -69,6 +69,12 @@ class User extends Authenticatable
 5、如果要使用已有工程的数据，需要两个文件
         laravelapp\storage\oauth-private.key
         laravelapp\storage\oauth-public.key
+
+6、切换mysql和mongo
+        修改.env
+            DB_CONNECTION=mysql
+            PASSPORT_USE_MONGO=false
+        修改User.php中use Authenticatable
 */
 
 class MongodbPassportServiceProvider extends ServiceProvider

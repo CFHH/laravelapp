@@ -65,9 +65,13 @@ class ApiAuthController extends Controller
         else
         {
             $oauth_client = Client::where('password_client', true)->get()->first();
+            if (config('app.passport_configs.use_mongo'))
+                $id = $oauth_client->_id;
+            else
+                $id = $oauth_client->id;
             $request->request->add([
                 'grant_type' => 'password',
-                'client_id' => $oauth_client->_id,
+                'client_id' => $id,
                 'client_secret' => $oauth_client->secret,
                 'username' => $crc,
                 'password' => $request->input('password'),

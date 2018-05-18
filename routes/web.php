@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/test', function ()
 {
-    echo 'get web test';
+	echo 'get web test';
 });
 
 Route::get('/testdb', function ()
