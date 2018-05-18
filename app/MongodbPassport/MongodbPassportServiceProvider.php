@@ -10,7 +10,8 @@ use App\MongodbPassport\Token;
 
 /*
 使用说明：
-0、拷贝文件
+0、拷贝文件到app/MongodbPassport下面
+
 1、修改.env，
         修改
             DB_CONNECTION=mongodb
@@ -25,6 +26,7 @@ use App\MongodbPassport\Token;
             PASSPORT_CLIENT_ID=5afbff6eae05a4032c0058c4
             PASSPORT_CLIENT_SECRET=v2TQJErVAR7BoeU500OwIOITBsSzn97NnpAfsvHf
             PASSPORT_USE_MONGO=true
+
 2、修改config/app.php
         在'providers'中增加App\MongodbPassport\MongodbPassportServiceProvider::class,
         增加一项
@@ -34,8 +36,10 @@ use App\MongodbPassport\Token;
                 'client_secret' => env("PASSPORT_CLIENT_SECRET"),
                 'use_mongo' => env("PASSPORT_USE_MONGO"),
             ],
-3、执行php artisan passport:install
+
+3、执行php artisan passport:install，生成key并且给oauth_client填数据
         注意不需要php artisan migrate
+
 4、修改User.php，这个看具体情况
 
 use Illuminate\Notifications\Notifiable;
@@ -61,6 +65,10 @@ class User extends Authenticatable
         return 'id_crc64';
     }
 }
+
+5、如果要使用已有工程的数据，需要两个文件
+        laravelapp\storage\oauth-private.key
+        laravelapp\storage\oauth-public.key
 */
 
 class MongodbPassportServiceProvider extends ServiceProvider
