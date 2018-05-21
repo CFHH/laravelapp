@@ -23,7 +23,8 @@ use App\MongodbPassport\User;
             MONGODB_USERNAME=
             MONGODB_PASSWORD=
         增加
-            PASSPORT_GRANT_TYPE="password"
+            PASSPORT_LOGIN_GRANT_TYPE=password
+            PASSPORT_REFRESH_GRANT_TYPE=refresh_token
             PASSPORT_CLIENT_ID=5afbff6eae05a4032c0058c4
             PASSPORT_CLIENT_SECRET=v2TQJErVAR7BoeU500OwIOITBsSzn97NnpAfsvHf
             PASSPORT_USE_MONGO=true
@@ -32,7 +33,8 @@ use App\MongodbPassport\User;
         在'providers'中增加App\MongodbPassport\MongodbPassportServiceProvider::class,
         增加一项
             'passport_configs' => [
-                'grant_type' => env("PASSPORT_GRANT_TYPE"),
+                'login_grant_type' => env("PASSPORT_LOGIN_GRANT_TYPE"),
+                'refresh_grant_type' => env("PASSPORT_REFRESH_GRANT_TYPE"),
                 'client_id' => env("PASSPORT_CLIENT_ID"),
                 'client_secret' => env("PASSPORT_CLIENT_SECRET"),
                 'use_mongo' => env("PASSPORT_USE_MONGO"),

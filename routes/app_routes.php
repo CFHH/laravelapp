@@ -23,6 +23,9 @@ Route::post('/register', 'Auth\ApiAuthController@register');
 Route::get('/login', 'Auth\ApiAuthController@login');
 Route::post('/login', 'Auth\ApiAuthController@login');
 
+Route::get('/refresh', 'Auth\ApiAuthController@refresh');
+Route::post('/refresh', 'Auth\ApiAuthController@refresh');
+
 Route::get('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 Route::post('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 

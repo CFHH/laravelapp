@@ -54,7 +54,7 @@ class ApiAuthController extends Controller
         if ($use_config)
         {
             $request->request->add([
-                'grant_type' => config('app.passport_configs.grant_type'),
+                'grant_type' => config('app.passport_configs.login_grant_type'),
                 'client_id' => config('app.passport_configs.client_id'),
                 'client_secret' => config('app.passport_configs.client_secret'),
                 'username' => $crc,
@@ -83,9 +83,51 @@ class ApiAuthController extends Controller
             'oauth/token',
             'POST'
         );
-
         $response = \Route::dispatch($proxy);
+        return $response;
+    }
 
+    public function refresh(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'refresh_token' => 'required',
+        ]);
+        if ($validator->fails())
+            return "参数错误";
+
+        $use_config = false;
+        if ($use_config)
+        {
+            $request->request->add([
+                'grant_type' => config('app.passport_configs.refresh_grant_type'),
+                'client_id' => config('app.passport_configs.client_id'),
+                'client_secret' => config('app.passport_configs.client_secret'),
+                'refresh_token' => $data['refresh_token'],
+                'scope' => ''
+            ]); 
+        }
+        else
+        {
+            $oauth_client = Client::where('password_client', true)->get()->first();
+            if (config('app.passport_configs.use_mongo'))
+                $id = $oauth_client->_id;
+            else
+                $id = $oauth_client->id;
+            $request->request->add([
+                'grant_type' => 'refresh_token',
+                'client_id' => $id,
+                'client_secret' => $oauth_client->secret,
+                'refresh_token' => $data['refresh_token'],
+                'scope' => ''
+            ]);
+        }
+
+        $proxy = Request::create(
+            'oauth/token',
+            'POST'
+        );
+        $response = \Route::dispatch($proxy);
         return $response;
     }
 
