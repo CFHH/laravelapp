@@ -18,19 +18,15 @@ Route::get('/testvft', function (Request $request)
 })->middleware('vpt');
 
 Route::get('/register', 'Auth\ApiAuthController@register');
-
 Route::post('/register', 'Auth\ApiAuthController@register');
 
 Route::get('/login', 'Auth\ApiAuthController@login');
-
 Route::post('/login', 'Auth\ApiAuthController@login');
 
-Route::get('/logout', 'Auth\ApiAuthController@logout');
-
-Route::post('/logout', 'Auth\ApiAuthController@logout');
+Route::get('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
+Route::post('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 
 Route::get('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
-
 Route::post('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
-
+Route::get('/behave2', 'Auth\ApiAuthController@behave')->middleware('auth:api');
 Route::post('/behave2', 'Auth\ApiAuthController@behave')->middleware('auth:api');

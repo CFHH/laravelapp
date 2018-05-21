@@ -39,7 +39,7 @@ class VerifyPassportToken extends Authenticate
         if ($guard->check())
         {
             $user = $guard->user();
-            //$this->app->instance('CurrentUser', $user);
+            //这里吧$user存成了全局变量$_ENV["CurrentUser"]里，也可以不存然后通过 $user = \Auth::guard('api')->user(); 获取
             $_ENV["CurrentUser"] = $user;
         }
         else

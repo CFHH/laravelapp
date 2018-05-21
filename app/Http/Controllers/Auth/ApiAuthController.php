@@ -100,8 +100,7 @@ class ApiAuthController extends Controller
 
     public function behave(Request $request)
     {
-        //$user = $this->app->make('CurrentUser');
-        $user = $_ENV["CurrentUser"];
+        $user = $_ENV["CurrentUser"];  //或者 $user = \Auth::guard('api')->user();
         echo "behave @ " . $user->name;
     }
 }
