@@ -100,11 +100,8 @@ class ApiAuthController extends Controller
 
     public function behave(Request $request)
     {
-        return "behave";
-    }
-
-    public function behaveAgent(Request $request)
-    {
-        return "behave";
+        //$user = $this->app->make('CurrentUser');
+        $user = $_ENV["CurrentUser"];
+        echo "behave @ " . $user->name;
     }
 }

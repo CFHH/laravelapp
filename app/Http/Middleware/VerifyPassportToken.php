@@ -38,8 +38,9 @@ class VerifyPassportToken extends Authenticate
         $guard = $this->auth->guard('api');
         if ($guard->check())
         {
-			$user = $guard->user();
-            return $user;
+            $user = $guard->user();
+            //$this->app->instance('CurrentUser', $user);
+            $_ENV["CurrentUser"] = $user;
         }
         else
         {
