@@ -35,13 +35,11 @@ class VerifyPassportToken extends Authenticate
                 }
             vpt如果失败，内容可以自定义，在App\Exceptions\Handler::render()里修改
     	*/
-        if ($this->auth->guard('api')->check())
+        $guard = $this->auth->guard('api');
+        if ($guard->check())
         {
-            /*
-			$user = $this->auth->shouldUse('api');
-            var_dump($user);  //NULL
+			$user = $guard->user();
             return $user;
-            */
         }
         else
         {
