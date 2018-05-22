@@ -26,6 +26,9 @@ Route::post('/login', 'Auth\ApiAuthController@login');
 Route::get('/refresh', 'Auth\ApiAuthController@refresh');
 Route::post('/refresh', 'Auth\ApiAuthController@refresh');
 
+Route::get('/loginex', 'Auth\ApiAuthController@loginex')->middleware('vpt');
+Route::post('/loginex', 'Auth\ApiAuthController@loginex')->middleware('vpt');
+
 Route::get('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 Route::post('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 

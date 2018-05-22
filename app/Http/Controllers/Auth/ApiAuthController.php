@@ -105,6 +105,12 @@ class ApiAuthController extends Controller
         return $response;
     }
 
+    public function loginex(Request $request)
+    {
+        $user = $_ENV["CurrentUser"];  //或者 $user = \Auth::guard('api')->user();
+        echo "loginex @ " . $user->name;
+    }
+
     public function refresh(Request $request)
     {
         $data = $request->all();
