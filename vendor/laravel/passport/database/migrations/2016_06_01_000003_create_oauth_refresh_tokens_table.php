@@ -15,6 +15,7 @@ class CreateOauthRefreshTokensTable extends Migration
     {
         Schema::create('oauth_refresh_tokens', function (Blueprint $table) {
             $table->string('id', 100)->primary();
+            //$table->bigInteger('user_id')->index()->nullable();
             $table->string('access_token_id', 100)->index();
             $table->boolean('revoked');
             $table->dateTime('expires_at')->nullable();

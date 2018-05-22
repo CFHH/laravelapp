@@ -63,6 +63,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     {
         $this->database->table('oauth_refresh_tokens')->insert([
             'id' => $id = $refreshTokenEntity->getIdentifier(),
+            'user_id' => $refreshTokenEntity->getAccessToken()->getUserIdentifier(),
             'access_token_id' => $accessTokenId = $refreshTokenEntity->getAccessToken()->getIdentifier(),
             'revoked' => false,
             'expires_at' => $refreshTokenEntity->getExpiryDateTime(),

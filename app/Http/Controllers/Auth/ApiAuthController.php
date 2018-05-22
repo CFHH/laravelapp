@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Laravel\Passport\Client;
+use Laravel\Passport\Token as AccessToken;
 
 class ApiAuthController extends Controller
 {
@@ -84,6 +85,22 @@ class ApiAuthController extends Controller
             'POST'
         );
         $response = \Route::dispatch($proxy);
+
+        $token_info = json_decode($response->content(), true);
+        /*
+        echo 'token_type : ' . $token_info['token_type'] . "<br/>";
+        echo 'expires_in : ' . $token_info['expires_in'] . "<br/>";
+        echo 'access_token : ' . $token_info['access_token'] . "<br/>";
+        echo 'refresh_token : ' . $token_info['refresh_token'] . "<br/>";
+        */
+        if (array_key_exists('access_token', $token_info))
+        {
+            //成功
+        }
+        else
+        {
+            //失败
+        }
         return $response;
     }
 
