@@ -34,5 +34,5 @@ Route::post('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 
 Route::get('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
 Route::post('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
-Route::get('/behave2', 'Auth\ApiAuthController@behave')->middleware('auth:api');
-Route::post('/behave2', 'Auth\ApiAuthController@behave')->middleware('auth:api');
+Route::get('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:api');
+Route::post('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:api');

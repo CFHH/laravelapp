@@ -38,9 +38,13 @@ class VerifyPassportToken extends Authenticate
         $guard = $this->auth->guard('api');
         if ($guard->check())
         {
+            // User获取方法
+            // 1、在知道是api认证时，总可以这样：$user = \Auth::guard('api')->user();
+            // 2、如果知道是我们自己的代码，可以这样：$user = $_ENV["CurrentUser"];
             $user = $guard->user();
-            //这里吧$user存成了全局变量$_ENV["CurrentUser"]里，也可以不存然后通过 $user = \Auth::guard('api')->user(); 获取
             $_ENV["CurrentUser"] = $user;
+            // 3、还可以更通用的：$user = $request->user();
+            $this->auth->shouldUse('api');  //这样就可以支持 $user = $request->user();
         }
         else
         {
