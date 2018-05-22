@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Laravel\Passport\Client;
 use Laravel\Passport\Token as AccessToken;
+use DB;
 
 class ApiAuthController extends Controller
 {
@@ -153,7 +154,15 @@ class ApiAuthController extends Controller
         $user = \Auth::guard('api')->user();
         if ($user == NULL)
             return "logout fail: no user";
-        $user->token()->delete();
+
+        //$user->token()->delete();  //这个只删除AccessToken
+        DB::table('oauth_access_tokens')
+            ->where('user_id', $user->id_crc64)
+            ->delete();
+        DB::table('oauth_refresh_tokens')
+            ->where('user_id', $user->id_crc64)
+            ->delete();
+
         return response()->json(['message' => '登出成功', 'status_code' => 200, 'data' => null]);
     }
 
