@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::routes();
+        Passport::routes();  //访问频率限制, passport的route有throttle，在Laravel\Passport\src\RouteRegistrar.php，function all()->forAccessTokens()
         Passport::tokensExpireIn(Carbon::now()->addDays(1));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(2));
         //Passport::revokeOtherTokens();
