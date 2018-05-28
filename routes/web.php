@@ -24,6 +24,19 @@ Route::get('/test', function ()
 	echo 'get web test';
 });
 
+Route::get('/testlog', function ()
+{
+	Log::emergency(__FILE__ . __FUNCTION__ . __LINE__ . ': emergency event');
+	Log::alert(__FILE__ . __FUNCTION__ . __LINE__ . ': alert event');
+	Log::critical(__FILE__ . __FUNCTION__ . __LINE__ . ': critical event');
+	Log::error(__FILE__ . __FUNCTION__ . __LINE__ . ': error event');
+	Log::warning(__FILE__ . __FUNCTION__ . __LINE__ . ': warning event');
+	Log::notice(__FILE__ . __FUNCTION__ . __LINE__ . ': notice event');
+	Log::info(__FILE__ . __FUNCTION__ . __LINE__ . ': info event');
+	Log::debug(__FILE__ . __FUNCTION__ . __LINE__ . ': debug event');
+	echo 'testlog';
+});
+
 Route::get('/testdb', function ()
 {
 	//需要先创建数据
@@ -128,7 +141,7 @@ Route::get('/mongouser_query', function (Request $request)
 		{
 			echo $user->name . " : ";
 			echo $user . "<br/>";
-		}		
+		}
 	}
 	else
 	{
@@ -139,7 +152,7 @@ Route::get('/mongouser_query', function (Request $request)
 			echo $user . "<br/>";
 			//$user->age = 18;
 			//$user->save();
-		}		
+		}
 	}
 });
 
