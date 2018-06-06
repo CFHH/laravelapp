@@ -111,6 +111,10 @@ Route::get('/crc', function () {
     echo CRC::crc32f("php");
 });
 
+Route::get('/bcrypt', function () {
+    echo bcrypt("cfhh123");
+});
+
 /*
 |--------------------------------------------------------------------------
 | 测试mongodb
