@@ -70,7 +70,10 @@ class Token extends Model
      */
     public function user()
     {
-        $provider = config('auth.guards.api.provider');
+        if ($_ENV["UserType"] == "User2")
+            $provider = config('auth.guards.api2.provider');
+        else
+            $provider = config('auth.guards.api.provider');
 
         return $this->belongsTo(config('auth.providers.'.$provider.'.model'));
     }

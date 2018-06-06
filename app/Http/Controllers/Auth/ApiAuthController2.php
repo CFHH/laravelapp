@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\User2 as User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,11 +11,11 @@ use Laravel\Passport\Client;
 use Laravel\Passport\Token as AccessToken;
 use DB;
 
-class ApiAuthController extends Controller
+class ApiAuthController2 extends Controller
 {
     protected function register(Request $request)
     {
-        $_ENV["UserType"] = "User";
+        $_ENV["UserType"] = "User2";
         $data = $request->all();
 
         $validator = Validator::make($data, [
@@ -51,7 +51,7 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
-        $_ENV["UserType"] = "User";
+        $_ENV["UserType"] = "User2";
         $crc = \CRC::crc64($request->input('email'));
 
         $use_config = false;
@@ -176,7 +176,7 @@ class ApiAuthController extends Controller
 
     public function behave(Request $request)
     {
-        $user1 = \Auth::guard('api')->user();
+        $user1 = \Auth::guard('api2')->user();
         $user2 = $_ENV["CurrentUser"];
         $user3 = $request->user();
         echo "behave @ " . $user1->name . ' ' . $user2->name . ' ' . $user3->name;

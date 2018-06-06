@@ -55,12 +55,13 @@ class VerifyPassportToken extends Authenticate
             // 2、如果知道是我们自己的代码，可以这样：$user = $_ENV["CurrentUser"];
             $user = $guard->user();
             $_ENV["CurrentUser"] = $user;
+            $_ENV["UserType"] = "User";
             // 3、还可以更通用的：$user = $request->user();
             $this->auth->shouldUse('api');  //这样就可以支持 $user = $request->user();
         }
         else
         {
-			throw new UnauthorizedHttpException('', 'NO PASSPORT AUTH.');
+			throw new UnauthorizedHttpException('', 'NO PASSPORT AUTH FOR USER.');
         }
     }
 }

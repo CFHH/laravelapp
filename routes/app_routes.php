@@ -36,3 +36,14 @@ Route::get('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
 Route::post('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
 Route::get('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:api');
 Route::post('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:api');
+
+
+
+Route::get('/register_user2', 'Auth\ApiAuthController2@register');
+Route::post('/register_user2', 'Auth\ApiAuthController2@register');
+
+Route::get('/login_user2', 'Auth\ApiAuthController2@login');
+Route::post('/login_user2', 'Auth\ApiAuthController2@login');
+
+Route::get('/behave_user2', 'Auth\ApiAuthController2@behave')->middleware('vpt2');
+Route::post('/behave_user2', 'Auth\ApiAuthController2@behave')->middleware('vpt2');

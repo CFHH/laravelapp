@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         //'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'vpt' => \App\Http\Middleware\VerifyPassportToken::class,
+        'vpt2' => \App\Http\Middleware\VerifyPassportToken2::class,
     ];
 }
