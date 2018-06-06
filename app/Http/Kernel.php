@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',  // 访问频率限制，这会使用auth.guards.web
+            'mythrottle:60,1',  // 访问频率限制（一分钟内访问次数超过60次，1分钟内拒绝访问），这会使用auth.guards.web
             //'bindings',
         ],
     ];
@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         //'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         //'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'mythrottle' => \App\Http\Middleware\ThrottleRequests::class,
         'vpt' => \App\Http\Middleware\VerifyPassportToken::class,
         'vpt2' => \App\Http\Middleware\VerifyPassportToken2::class,
     ];

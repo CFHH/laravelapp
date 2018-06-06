@@ -17,7 +17,7 @@ use League\OAuth2\Server\CryptTrait;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Support\Facades\Log;
+use Log;
 
 class BearerTokenValidator implements AuthorizationValidatorInterface
 {
