@@ -218,5 +218,6 @@ return [
         'client_id' => env("PASSPORT_CLIENT_ID"),
         'client_secret' => env("PASSPORT_CLIENT_SECRET"),
         'use_mongo' => env("PASSPORT_USE_MONGO"),
+        'log_validate_error' => env("PASSPORT_LOG_VALIDATE_ERROR"),
     ],
 ];

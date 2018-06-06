@@ -52,6 +52,11 @@ return [
             'prefix' => '',
             'strict' => true,
             'engine' => null,
+            /* mysql长连接
+            'options' => [
+                PDO::ATTR_PERSISTENT => true,
+            ],
+            */
         ],
 
         'pgsql' => [
@@ -78,7 +83,7 @@ return [
             'prefix' => '',
         ],
 
-        'mongodb' => [    
+        'mongodb' => [
             'driver'   => 'mongodb',
             'host'     => env('MONGODB_HOST', '127.0.0.1'),
             'port'     => env('MONGODB_PORT', '27017'),

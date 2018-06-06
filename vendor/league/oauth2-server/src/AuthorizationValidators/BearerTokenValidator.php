@@ -17,6 +17,7 @@ use League\OAuth2\Server\CryptTrait;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Support\Facades\Log;
 
 class BearerTokenValidator implements AuthorizationValidatorInterface
 {
@@ -74,6 +75,31 @@ class BearerTokenValidator implements AuthorizationValidatorInterface
             $data->setCurrentTime(time());
 
             if ($token->validate($data) === false) {
+                if (config('app.passport_configs.log_validate_error'))
+                {
+                    Log::error('----------ZZW TOKEN VALIDATION ERROR BEGIN----------');
+                    $header = $token->getHeaders();
+                    Log::error("header, typ: " . $header['typ'] . ", alg: " . $header['alg'] . ", jti: " . $header['jti']);
+                    $claims = $token->getClaims();
+                    foreach ($claims as $claim)
+                    {
+                        $name = $claim->getName();
+                        $value = $claim->getValue();
+                        $value_string = $value;
+                        if (is_null($value))
+                            $value_string = "null";
+                        if (is_array($value))
+                            $value_string = implode(",", $value);
+                        $data_val = $data->get($name);
+                        $data_string = $data_val;
+                        if (is_null($data_val))
+                            $data_string = "null";
+                        if (is_array($data_val))
+                            $data_string = implode(",", $data_val);
+                        Log::error("claim, name: " . $name . ", value: " . $value_string . ", data: " . $data_string);
+                    }
+                    Log::error('----------ZZW TOKEN VALIDATION ERROR END----------');
+                }
                 throw OAuthServerException::accessDenied('Access token is invalid');
             }
 

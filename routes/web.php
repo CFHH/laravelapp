@@ -14,14 +14,73 @@ use App\User;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function ()
+{
     //return view('welcome');
     echo 'Hello, world!';
 });
 
+Route::get('/phpinfo', function ()
+{
+	echo phpinfo();
+});
+
+Route::get('/testsleep', function ()
+{
+	sleep(10);
+	echo 'sleep over';
+});
+
+Route::get('/testcurl', function ()
+{
+	$url = 'http://192.168.1.163:8080/hello';
+	$curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
+    curl_setopt($curl, CURLOPT_TIMEOUT, 100);
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $data = curl_exec($curl);
+    $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    echo $data;
+});
+
+Route::get('/testcurl2', function ()
+{
+	$http = new GuzzleHttp\Client();
+	$url = 'http://192.168.1.163:8080/hello';
+	//$response = $http->get($url);
+	//$response = $client->request('GET', $url, []);
+	//echo $response->getStatusCode();
+	//echo $response->getHeader('content-type');
+	//echo $response->getBody();
+
+	// 发送一个异步请求
+	$request = new \GuzzleHttp\Psr7\Request('GET', $url);
+	$promise = $client->sendAsync($request)->then(function ($response) {
+	    echo 'I completed! ' . $response->getBody();
+	});
+	$promise->wait();
+});
+
+
+
 Route::get('/test', function ()
 {
+	/*
+	$user = User::where("email", "cfhh@163.com")->first();
+	if (isset($user))
+		echo $user;
+	else
+		echo "no user";
+	*/
 	echo 'get web test';
+});
+
+Route::get('/testmd5', function ()
+{
+	echo md5('some data to hash');
 });
 
 Route::get('/testlog', function ()
