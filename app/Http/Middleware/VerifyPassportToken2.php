@@ -6,12 +6,12 @@ use Closure;
 use Illuminate\Auth\Middleware\Authenticate;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-
+//不要用这种方式
 class VerifyPassportToken2 extends Authenticate
 {
     protected function authenticate(array $guards)
     {
-        $passport_guard = 'passport2';
+        $passport_guard = 'passport1';
         $guard = $this->auth->guard($passport_guard);
         if ($guard->check())
         {
@@ -26,6 +26,7 @@ class VerifyPassportToken2 extends Authenticate
         }
         else
         {
+            //App\Exceptions/Handler里自定义消息
             throw new UnauthorizedHttpException('', 'NO PASSPORT AUTH FOR USER.');
         }
     }
