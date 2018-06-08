@@ -280,7 +280,7 @@ class Passport
      * @param  string  $guard
      * @return \Illuminate\Contracts\Auth\Authenticatable
      */
-    public static function actingAs($user, $scopes = [], $guard = 'api')
+    public static function actingAs($user, $scopes = [], $guard = 'nodefault')
     {
         $token = Mockery::mock(Token::class)->shouldIgnoreMissing(false);
 

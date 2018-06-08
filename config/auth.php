@@ -36,17 +36,26 @@ return [
     */
 
     'guards' => [
+        /* ThrottleRequests的默认实现需要用到这个
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        */
 
+        /*
         'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],
+        */
+
+        'passport1' => [
             'driver' => 'passport',
             'provider' => 'users',
         ],
 
-        'api2' => [
+        'passport2' => [
             'driver' => 'passport',
             'provider' => 'user2s',
         ],

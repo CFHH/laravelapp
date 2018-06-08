@@ -15,7 +15,7 @@ class ApiAuthController extends Controller
 {
     protected function register(Request $request)
     {
-        $_ENV["UserType"] = "User";
+        $_ENV["PASSPORT_GUARD"] = "passport1";
         $data = $request->all();
 
         $validator = Validator::make($data, [
@@ -27,10 +27,14 @@ class ApiAuthController extends Controller
             return "参数错误";
 
         $crc = \CRC::crc64($data['email']);
-        $result = NULL;
+        $exist_users = User::where('id_crc64', $crc)->get();
+        if (count($exist_users) > 0)
+            return "用户已经存在";
+
+        $user = null;
         try
         {
-            $result = User::create([
+            $user = User::create([
                 'id_crc64' => $crc,
                 'email' => $data['email'],
                 'name' => $data['name'],
@@ -39,24 +43,28 @@ class ApiAuthController extends Controller
         }
         catch (QueryException $e)
         {
-            return 'email exists ' . $data['email'];
+            return "用户已经存在";
         }
         finally
         {
         }
-        if ($result == NULL)
-            return 'error';
-        return 'success';
+        if ($user == NULL)
+            return "内部错误";
+        return "成功创建" . $user->email;
     }
 
     public function login(Request $request)
     {
-        $_ENV["UserType"] = "User";
+        $_ENV["PASSPORT_GUARD"] = "passport1";
         $crc = \CRC::crc64($request->input('email'));
 
         $use_config = false;
         if ($use_config)
         {
+            /*
+                如果使用.env中关于passport的配置
+                mysql和mongo之间切换时，需要改PASSPORT_CLIENT_ID和PASSPORT_CLIENT_SECRET，后者可以在mysql和mongo之间设置一致
+            */
             $request->request->add([
                 'grant_type' => config('app.passport_configs.login_grant_type'),
                 'client_id' => config('app.passport_configs.client_id'),
@@ -96,7 +104,7 @@ class ApiAuthController extends Controller
         echo 'access_token : ' . $token_info['access_token'] . "<br/>";
         echo 'refresh_token : ' . $token_info['refresh_token'] . "<br/>";
         */
-        if (array_key_exists('access_token', $token_info))
+        if (!is_null($token_info) && array_key_exists('access_token', $token_info))
         {
             //成功
         }
@@ -109,7 +117,7 @@ class ApiAuthController extends Controller
 
     public function loginex(Request $request)
     {
-        $user = $_ENV["CurrentUser"];  //或者 $user = \Auth::guard('api')->user();
+        $user = $_ENV["CurrentUser"];
         echo "loginex @ " . $user->name;
     }
 
@@ -159,10 +167,7 @@ class ApiAuthController extends Controller
 
     public function logout(Request $request)
     {
-        $user = \Auth::guard('api')->user();
-        if ($user == NULL)
-            return "logout fail: no user";
-
+        $user = $_ENV["CurrentUser"];
         //$user->token()->delete();  //这个只删除AccessToken
         DB::table('oauth_access_tokens')
             ->where('user_id', $user->id_crc64)
@@ -176,7 +181,7 @@ class ApiAuthController extends Controller
 
     public function behave(Request $request)
     {
-        $user1 = \Auth::guard('api')->user();
+        $user1 = \Auth::guard($_ENV["PASSPORT_GUARD"])->user();
         $user2 = $_ENV["CurrentUser"];
         $user3 = $request->user();
         echo "behave @ " . $user1->name . ' ' . $user2->name . ' ' . $user3->name;

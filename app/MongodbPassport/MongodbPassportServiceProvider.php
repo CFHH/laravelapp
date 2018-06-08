@@ -22,7 +22,7 @@ use App\MongodbPassport\User;
             MONGODB_DATABASE=laravelapp
             MONGODB_USERNAME=
             MONGODB_PASSWORD=
-        增加
+        增加，这个现在是也可以直接查oauth_clients表了
             PASSPORT_LOGIN_GRANT_TYPE=password
             PASSPORT_REFRESH_GRANT_TYPE=refresh_token
             PASSPORT_CLIENT_ID=5afbff6eae05a4032c0058c4

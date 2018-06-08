@@ -71,35 +71,10 @@ class BearerTokenValidator implements AuthorizationValidatorInterface
             }
 
             // Ensure access token hasn't expired
-            $data = new ValidationData();
-            $data->setCurrentTime(time());
+            $data = new ValidationData(time());
 
             if ($token->validate($data) === false) {
-                if (config('app.passport_configs.log_validate_error'))
-                {
-                    Log::error('----------ZZW TOKEN VALIDATION ERROR BEGIN----------');
-                    $header = $token->getHeaders();
-                    Log::error("header, typ: " . $header['typ'] . ", alg: " . $header['alg'] . ", jti: " . $header['jti']);
-                    $claims = $token->getClaims();
-                    foreach ($claims as $claim)
-                    {
-                        $name = $claim->getName();
-                        $value = $claim->getValue();
-                        $value_string = $value;
-                        if (is_null($value))
-                            $value_string = "null";
-                        if (is_array($value))
-                            $value_string = implode(",", $value);
-                        $data_val = $data->get($name);
-                        $data_string = $data_val;
-                        if (is_null($data_val))
-                            $data_string = "null";
-                        if (is_array($data_val))
-                            $data_string = implode(",", $data_val);
-                        Log::error("claim, name: " . $name . ", value: " . $value_string . ", data: " . $data_string);
-                    }
-                    Log::error('----------ZZW TOKEN VALIDATION ERROR END----------');
-                }
+                //$this->logValidateError($jwt, $tokenm, $data);
                 throw OAuthServerException::accessDenied('Access token is invalid');
             }
 
@@ -121,5 +96,35 @@ class BearerTokenValidator implements AuthorizationValidatorInterface
             //JWR couldn't be parsed so return the request as is
             throw OAuthServerException::accessDenied('Error while decoding to JSON');
         }
+    }
+
+    protected function logValidateError($jwt, $token, $data, $hint = null)
+    {
+        if (!config('app.passport_configs.log_validate_error'))
+            return;
+        Log::error('----------ZZW TOKEN BEGIN----------');
+        Log::error('  jwt : ' . $jwt);
+        Log::error('token : ' . $token);
+        $header = $token->getHeaders();
+        Log::error("header, typ: " . $header['typ'] . ", alg: " . $header['alg'] . ", jti: " . $header['jti']);
+        $claims = $token->getClaims();
+        foreach ($claims as $claim)
+        {
+            $name = $claim->getName();
+            $value = $claim->getValue();
+            $value_string = $value;
+            if (is_null($value))
+                $value_string = "null";
+            if (is_array($value))
+                $value_string = implode(",", $value);
+            $data_val = $data->get($name);
+            $data_string = $data_val;
+            if (is_null($data_val))
+                $data_string = "null";
+            if (is_array($data_val))
+                $data_string = implode(",", $data_val);
+            Log::error("claim, name: " . $name . ", value: " . $value_string . ", data: " . $data_string);
+        }
+        Log::error('----------ZZW TOKEN END----------');
     }
 }

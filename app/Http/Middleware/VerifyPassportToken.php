@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Illuminate\Http\Response;
 
 
 class VerifyPassportToken extends Authenticate
@@ -30,7 +31,7 @@ class VerifyPassportToken extends Authenticate
             Laravel\Passport\Bridge\ClientRepository::getClientEntity()，$this->clients是ClientRepository
             Laravel\Passport\ClientRepository::findActive()，mongodb默认的逐渐是"_id"，所以.env中PASSPORT_CLIENT_ID=5afbff6eae05a4032c0058c4
         二、使用token（就是本中间件做的事情）
-            $this->auth->guard('api')的类型是Illuminate\Auth\RequestGuard，由Laravel\Passport\PassportServiceProvider::makeGuard()创建
+            $this->auth->guard($_ENV["PASSPORT_GUARD"])的类型是Illuminate\Auth\RequestGuard，由Laravel\Passport\PassportServiceProvider::makeGuard()创建
             Illuminate\Auth\GuardHelpers::check()
             Illuminate\Auth\RequestGuard::user()，call_user_func的closure在makeGuard()里
             Laravel\Passport\Guards\TokenGuard::user()
@@ -47,21 +48,34 @@ class VerifyPassportToken extends Authenticate
                 }
             vpt如果失败，内容可以自定义，在App\Exceptions\Handler::render()里修改
         */
-        $guard = $this->auth->guard('api');
+        $passport_guard = 'passport1';
+        $guard = $this->auth->guard($passport_guard);
         if ($guard->check())
         {
             // User获取方法
-            // 1、在知道是api认证时，总可以这样：$user = \Auth::guard('api')->user();
-            // 2、如果知道是我们自己的代码，可以这样：$user = $_ENV["CurrentUser"];
+            // 1、$user = \Auth::guard($_ENV["PASSPORT_GUARD"])->user();
+            // 2、$user = $_ENV["CurrentUser"];
             $user = $guard->user();
             $_ENV["CurrentUser"] = $user;
-            $_ENV["UserType"] = "User";
-            // 3、还可以更通用的：$user = $request->user();
-            $this->auth->shouldUse('api');  //这样就可以支持 $user = $request->user();
+            $_ENV["PASSPORT_GUARD"] = $passport_guard;
+            // 3、更通用的：$user = $request->user();
+            $this->auth->shouldUse($passport_guard);  //这样就可以支持 $user = $request->user();
         }
         else
         {
 			throw new UnauthorizedHttpException('', 'NO PASSPORT AUTH FOR USER.');
+            //$this->buildResponse();
         }
+    }
+
+    protected function buildResponse()
+    {
+        $message = json_encode([
+            'error' => [
+                'message' => 'TNO PASSPORT AUTH FOR USER.',
+            ],
+            'status_code' => 401,
+        ]);
+        return new Response($message, 401);
     }
 }

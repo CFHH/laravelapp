@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'mythrottle:60,1',  // 访问频率限制（一分钟内访问次数超过60次，1分钟内拒绝访问），这会使用auth.guards.web
+            //'mythrottle:60,1',  // 访问频率限制（一分钟内访问次数超过60次，1分钟内拒绝访问），这会使用auth.guards.web
             //'bindings',
         ],
     ];

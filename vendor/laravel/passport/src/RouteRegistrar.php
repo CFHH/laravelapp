@@ -69,7 +69,7 @@ class RouteRegistrar
     {
         $this->router->post('/token', [
             'uses' => 'AccessTokenController@issueToken',
-            'middleware' => 'throttle',
+            //'middleware' => 'throttle',  // 访问频率限制
         ]);
 
         $this->router->group(['middleware' => ['web', 'auth']], function ($router) {

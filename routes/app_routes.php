@@ -17,6 +17,12 @@ Route::get('/testvft', function (Request $request)
     echo "get app test vft";
 })->middleware('vpt');
 
+Route::get('/test_route', [/*action*/'uses' => 'TestController@TestRoute', /*middleware*/'middleware' => ['throttle:60,1'], /*done*/]);
+Route::post('/test_route', [/*action*/'uses' => 'TestController@TestRoute', /*middleware*/'middleware' => ['throttle:60,1', 'vpt'], /*done*/]);
+
+/*
+User
+*/
 Route::get('/register', 'Auth\ApiAuthController@register');
 Route::post('/register', 'Auth\ApiAuthController@register');
 
@@ -34,11 +40,13 @@ Route::post('/logout', 'Auth\ApiAuthController@logout')->middleware('vpt');
 
 Route::get('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
 Route::post('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt');
-Route::get('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:api');
-Route::post('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:api');
+Route::get('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:passport1');  //需要使用app/Http/Kernel.php中'auth'这个中间件
+Route::post('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:passport1');
 
 
-
+/*
+User2
+*/
 Route::get('/register_user2', 'Auth\ApiAuthController2@register');
 Route::post('/register_user2', 'Auth\ApiAuthController2@register');
 

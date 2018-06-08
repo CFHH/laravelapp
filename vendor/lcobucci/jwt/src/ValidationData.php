@@ -36,8 +36,8 @@ class ValidationData
             'iss' => null,
             'aud' => null,
             'sub' => null,
-            'iat' => $currentTime,
-            'nbf' => $currentTime,
+            'iat' => $currentTime + 10,  // ZZW TOKEN 允许服务器之间有10秒的时间差异
+            'nbf' => $currentTime + 10,  // ZZW TOKEN 允许服务器之间有10秒的时间差异
             'exp' => $currentTime
         ];
     }
@@ -89,8 +89,8 @@ class ValidationData
      */
     public function setCurrentTime($currentTime)
     {
-        $this->items['iat'] = (int) $currentTime;
-        $this->items['nbf'] = (int) $currentTime;
+        $this->items['iat'] = (int) $currentTime + 10;  // ZZW TOKEN 允许服务器之间有10秒的时间差异
+        $this->items['nbf'] = (int) $currentTime + 10;  // ZZW TOKEN 允许服务器之间有10秒的时间差异
         $this->items['exp'] = (int) $currentTime;
     }
 
