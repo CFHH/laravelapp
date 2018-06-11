@@ -32,13 +32,20 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function getKeyName()  //这个应该不需要，Model里默认返回$primaryKey了
+    {
+        return 'id_crc64';
+    }
+
     public function findForPassport($username)
     {
         return $this->where('id_crc64', $username)->first();
     }
 
-    public function getKeyName()
+    /*
+    public function validateForPassportPasswordGrant($password)
     {
-        return 'id_crc64';
+        //自定义密码验证
     }
+    */
 }

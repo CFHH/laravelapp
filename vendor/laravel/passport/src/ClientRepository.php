@@ -37,7 +37,12 @@ class ClientRepository
      */
     public function findForUser($clientId, $userId)
     {
-        return Client::where('id', $clientId)
+        //Model有getKeyName()，但不是静态的
+        if (config('app.passport_configs.use_mongo'))
+            $primaryKey = '_id';
+        else
+            $primaryKey = 'id';
+        return Client::where($primaryKey, $clientId)
                      ->where('user_id', $userId)
                      ->first();
     }

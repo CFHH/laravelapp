@@ -67,11 +67,11 @@ class ApiAuthController extends Controller
             */
             $request->request->add([
                 'grant_type' => config('app.passport_configs.login_grant_type'),
+                'scope' => '',
                 'client_id' => config('app.passport_configs.client_id'),
                 'client_secret' => config('app.passport_configs.client_secret'),
                 'username' => $crc,
                 'password' => $request->input('password'),
-                'scope' => ''
             ]);
         }
         else
@@ -83,11 +83,11 @@ class ApiAuthController extends Controller
                 $id = $oauth_client->id;
             $request->request->add([
                 'grant_type' => 'password',
+                'scope' => '',
                 'client_id' => $id,
                 'client_secret' => $oauth_client->secret,
                 'username' => $crc,
                 'password' => $request->input('password'),
-                'scope' => ''
             ]);
         }
 
@@ -135,10 +135,10 @@ class ApiAuthController extends Controller
         {
             $request->request->add([
                 'grant_type' => config('app.passport_configs.refresh_grant_type'),
+                'scope' => '',
                 'client_id' => config('app.passport_configs.client_id'),
                 'client_secret' => config('app.passport_configs.client_secret'),
                 'refresh_token' => $data['refresh_token'],
-                'scope' => ''
             ]);
         }
         else
@@ -150,10 +150,10 @@ class ApiAuthController extends Controller
                 $id = $oauth_client->id;
             $request->request->add([
                 'grant_type' => 'refresh_token',
+                'scope' => '',
                 'client_id' => $id,
                 'client_secret' => $oauth_client->secret,
                 'refresh_token' => $data['refresh_token'],
-                'scope' => ''
             ]);
         }
 

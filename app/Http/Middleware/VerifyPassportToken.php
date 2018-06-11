@@ -11,19 +11,31 @@ use Illuminate\Http\Response;
     客户端代码准备数据发到这个route：oauth/token
     Laravel\Passport\RouteRegistrar::forAccessTokens()
     Laravel\Passport\Http\Controllers\AccessTokenController::issueToken()
+    League\OAuth2\Server\AuthorizationServer::respondToAccessTokenRequest()
+        ！！！要求填写Request['grant_type']，值不同最终使用的grant也不同
+        通过get_class，发现有3个grantType，都继承自AbstractAuthorizeGrant，这仨是在Laravel\Passport\PassportServiceProvider::register()时注册的，注册时AuthorizationServer::enableGrantType()设置这仨的$defaultScope = ''，
+            League\OAuth2\Server\Grant\AuthCodeGrant, getIdentifier() == 'authorization_code'
+            League\OAuth2\Server\Grant\RefreshTokenGrant, getIdentifier() == 'refresh_token'
+            League\OAuth2\Server\Grant\PasswordGrant, getIdentifier() == 'password'
     League\OAuth2\Server\Grant\PasswordGrant::respondToAccessTokenRequest()
-    League\OAuth2\Server\Grant\PasswordGrant::validateUser()
-    Laravel\Passport\Bridge\UserRepository\getUserEntityByUserCredentials()
-        以此方式获得User
-            $provider = config('auth.guards.api.provider')
-            $model = config('auth.providers.'.$provider.'.model')
-        如果想改掉这种默认行为，可以在_ENV里设置标志，然后自己自定义行为
-        搜索auth.guards.api.provider，可以发现多个地方
-            app\MongodbPassport\Token.php::user()
-            vendor\laravel\passport\src\Token.php::user()
-
-    Laravel\Passport\Bridge\ClientRepository::getClientEntity()，$this->clients是ClientRepository
-    Laravel\Passport\ClientRepository::findActive()，mongodb默认的逐渐是"_id"，所以.env中PASSPORT_CLIENT_ID=5afbff6eae05a4032c0058c4
+        ！！！要求填写Request['scope']，并且和$defaultScope = ''匹配
+        League\OAuth2\Server\Grant::validateClient()
+            ！！！要求填写Request['client_id']和Request['client_secret']
+            Laravel\Passport\Bridge\ClientRepository::getClientEntity()
+            Laravel\Passport\ClientRepository::findActive()，mongodb默认的主键是"_id"，所以.env中PASSPORT_CLIENT_ID=5afbff6eae05a4032c0058c4
+        PasswordGrant::validateUser()
+            ！！！要求填写Request['username']和Request['password']
+            Laravel\Passport\Bridge\UserRepository\getUserEntityByUserCredentials()
+                以此方式获得User
+                    $provider = config('auth.guards.api.provider')
+                    $model = config('auth.providers.'.$provider.'.model')
+                如果想改掉这种默认行为，可以在_ENV里设置标志，然后自己自定义行为
+                搜索auth.guards.api.provider，可以发现多个地方
+                    app\MongodbPassport\Token.php::user()
+                    vendor\laravel\passport\src\Token.php::user()
+                此函数最终返回了Laravel\Passport\Bridge\User
+        PasswordGrant::issueAccessToken()
+        PasswordGrant::issueRefreshToken()
 二、使用token（就是本中间件做的事情）
     $this->auth->guard($_ENV["PASSPORT_GUARD"])的类型是Illuminate\Auth\RequestGuard，由Laravel\Passport\PassportServiceProvider::makeGuard()创建
     Illuminate\Auth\GuardHelpers::check()
