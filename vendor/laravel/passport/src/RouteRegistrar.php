@@ -72,6 +72,16 @@ class RouteRegistrar
             //'middleware' => 'throttle',  // 访问频率限制
         ]);
 
+        $this->router->post('/token_user1', [
+            'uses' => 'AccessTokenController@issueToken',
+            'middleware' => 'passport_login:passport1',
+        ]);
+
+        $this->router->post('/token_user2', [
+            'uses' => 'AccessTokenController@issueToken',
+            'middleware' => 'passport_login:passport2',
+        ]);
+
         $this->router->group(['middleware' => ['web', 'auth']], function ($router) {
             $router->get('/tokens', [
                 'uses' => 'AuthorizedAccessTokenController@forUser',
