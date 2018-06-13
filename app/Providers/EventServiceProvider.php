@@ -22,6 +22,10 @@ class EventServiceProvider extends ServiceProvider
         'Laravel\Passport\Events\AccessTokenCreated' => [
             'App\Listeners\RevokeOldTokens',
         ],
+
+        'Illuminate\Database\Events\QueryExecuted' => [
+            'App\Listeners\LogDBQuery',
+        ]
     ];
 
     /**
