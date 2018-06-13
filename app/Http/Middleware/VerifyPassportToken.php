@@ -17,7 +17,7 @@ use Illuminate\Http\Response;
             League\OAuth2\Server\Grant\AuthCodeGrant, getIdentifier() == 'authorization_code'
             League\OAuth2\Server\Grant\RefreshTokenGrant, getIdentifier() == 'refresh_token'
             League\OAuth2\Server\Grant\PasswordGrant, getIdentifier() == 'password'
-    League\OAuth2\Server\Grant\PasswordGrant::respondToAccessTokenRequest()
+    1、League\OAuth2\Server\Grant\PasswordGrant::respondToAccessTokenRequest()
         ！！！要求填写Request['scope']，并且和$defaultScope = ''匹配
         League\OAuth2\Server\Grant::validateClient()
             ！！！要求填写Request['client_id']和Request['client_secret']
@@ -34,8 +34,14 @@ use Illuminate\Http\Response;
                     app\MongodbPassport\Token.php::user()
                     vendor\laravel\passport\src\Token.php::user()
                 此函数最终返回了Laravel\Passport\Bridge\User
-        PasswordGrant::issueAccessToken()
-        PasswordGrant::issueRefreshToken()
+        AbstractGrant::issueAccessToken()
+            Laravel\Passport\Bridge\AccessTokenRepository::getNewToken()，创建Laravel\Passport\Bridge\AccessToken
+            AbstractGrant::generateUniqueIdentifier()
+            Laravel\Passport\Bridge\AccessTokenRepository::persistNewAccessToken()，入库
+        AbstractGrant::issueRefreshToken()
+    2、League\OAuth2\Server\ResponseTypes\BearerTokenResponse::generateHttpResponse()
+        League\OAuth2\Server\Entities\Traits\AccessTokenTrait::convertToJWT()
+        League\OAuth2\Server\CryptTrait::encrypt()
 二、使用token（就是本中间件做的事情）
     $this->auth->guard($_ENV["PASSPORT_GUARD"])的类型是Illuminate\Auth\RequestGuard，由Laravel\Passport\PassportServiceProvider::makeGuard()创建
     Illuminate\Auth\GuardHelpers::check()

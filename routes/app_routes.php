@@ -44,6 +44,9 @@ Route::post('/behave', 'Auth\ApiAuthController@behave')->middleware('vpt:passpor
 Route::get('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:passport1');  //需要使用app/Http/Kernel.php中'auth'这个中间件，App\Http\Middleware\Authenticate
 Route::post('/behave2', 'Auth\ApiAuthController@behave2')->middleware('auth:passport1');
 
+Route::get('/behaveex', 'Auth\ApiAuthController@behaveex')->middleware('vptex:passport1');
+Route::post('/behaveex', 'Auth\ApiAuthController@behaveex')->middleware('vptex:passport1');
+
 
 /*
 User2
