@@ -10,9 +10,32 @@ use Illuminate\Database\QueryException;
 use Laravel\Passport\Client;
 use Laravel\Passport\Token as AccessToken;
 use DB;
+use Redis;
 
 class ApiAuthController2 extends Controller
 {
+    private function getOauthClinetIDAndSecret()
+    {
+        $keys = ['oauth_client_id', 'oauth_client_secret'];
+        $id_secret = Redis::mget($keys);
+        if($id_secret == null || $id_secret[0] == null || $id_secret[1] == null)
+        {
+            $oauth_client = Client::where('password_client', true)->get()->first();
+            if ($oauth_client == null)
+                return null;
+            if (config('app.passport_configs.use_mongo'))
+                $id = $oauth_client->_id;
+            else
+                $id = $oauth_client->id;
+            Redis::mset(["oauth_client_id" => $id, "oauth_client_secret" => $oauth_client->secret]);
+            return [$id, $oauth_client->secret];
+        }
+        else
+        {
+            return $id_secret;
+        }
+    }
+
     protected function register(Request $request)
     {
         $_ENV["PASSPORT_GUARD"] = "passport2";
@@ -27,8 +50,8 @@ class ApiAuthController2 extends Controller
             return "参数错误";
 
         $crc = \CRC::crc64($data['email']);
-        $exist_users = User::where('id_crc64', $crc)->get();
-        if (count($exist_users) > 0)
+        $exist_user = User::find($crc);
+        if ($exist_user != null)
             return "用户已经存在";
 
         $user = null;
@@ -72,15 +95,11 @@ class ApiAuthController2 extends Controller
         }
         else
         {
-            $oauth_client = Client::where('password_client', true)->get()->first();
-            if (config('app.passport_configs.use_mongo'))
-                $id = $oauth_client->_id;
-            else
-                $id = $oauth_client->id;
+            $id_secret = $this->getOauthClinetIDAndSecret();
             $request->request->add([
                 'grant_type' => 'password',
-                'client_id' => $id,
-                'client_secret' => $oauth_client->secret,
+                'client_id' => $id_secret[0],
+                'client_secret' => $id_secret[1],
                 'username' => $crc,
                 'password' => $request->input('password'),
                 'scope' => ''
@@ -139,17 +158,13 @@ class ApiAuthController2 extends Controller
         }
         else
         {
-            $oauth_client = Client::where('password_client', true)->get()->first();
-            if (config('app.passport_configs.use_mongo'))
-                $id = $oauth_client->_id;
-            else
-                $id = $oauth_client->id;
+            $id_secret = $this->getOauthClinetIDAndSecret();
             $request->request->add([
                 'grant_type' => 'refresh_token',
-                'client_id' => $id,
-                'client_secret' => $oauth_client->secret,
+                'scope' => '',
+                'client_id' => $id_secret[0],
+                'client_secret' => $id_secret[1],
                 'refresh_token' => $data['refresh_token'],
-                'scope' => ''
             ]);
         }
 

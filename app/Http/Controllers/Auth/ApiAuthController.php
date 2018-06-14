@@ -10,10 +10,33 @@ use Illuminate\Database\QueryException;
 use Laravel\Passport\Client;
 use Laravel\Passport\Token as AccessToken;
 use DB;
+use Redis;
 
 class ApiAuthController extends Controller
 {
-    protected function register(Request $request)
+    private function getOauthClinetIDAndSecret()
+    {
+        $keys = ['oauth_client_id', 'oauth_client_secret'];
+        $id_secret = Redis::mget($keys);
+        if($id_secret == null || $id_secret[0] == null || $id_secret[1] == null)
+        {
+            $oauth_client = Client::where('password_client', true)->get()->first();
+            if ($oauth_client == null)
+                return null;
+            if (config('app.passport_configs.use_mongo'))
+                $id = $oauth_client->_id;
+            else
+                $id = $oauth_client->id;
+            Redis::mset(["oauth_client_id" => $id, "oauth_client_secret" => $oauth_client->secret]);
+            return [$id, $oauth_client->secret];
+        }
+        else
+        {
+            return $id_secret;
+        }
+    }
+
+    public function register(Request $request)
     {
         $_ENV["PASSPORT_GUARD"] = "passport1";
         $data = $request->all();
@@ -27,8 +50,8 @@ class ApiAuthController extends Controller
             return "参数错误";
 
         $crc = \CRC::crc64($data['email']);
-        $exist_users = User::where('id_crc64', $crc)->get();
-        if (count($exist_users) > 0)
+        $exist_user = User::find($crc);
+        if ($exist_user != null)
             return "用户已经存在";
 
         $user = null;
@@ -55,6 +78,15 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
+        /*
+        DB query from mysql :: select * from `oauth_clients` where `password_client` = ?
+        DB query from mysql :: select * from `oauth_clients` where `oauth_clients`.`id` = ? limit 1
+        DB query from mysql :: select * from `users` where `id_crc64` = ? limit 1
+        DB query from mysql :: insert into `oauth_access_tokens` (`id`, `user_id`, `client_id`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) values (?, ?, ?, ?, ?, ?, ?, ?)
+        DB query from mysql :: delete from `oauth_access_tokens` where `user_id` = ? and `id` != ?
+        DB query from mysql :: delete from `oauth_refresh_tokens` where `user_id` = ?
+        DB query from mysql :: insert into `oauth_refresh_tokens` (`id`, `user_id`, `access_token_id`, `revoked`, `expires_at`) values (?, ?, ?, ?, ?)
+        */
         $_ENV["PASSPORT_GUARD"] = "passport1";
         $crc = \CRC::crc64($request->input('email'));
 
@@ -76,16 +108,12 @@ class ApiAuthController extends Controller
         }
         else
         {
-            $oauth_client = Client::where('password_client', true)->get()->first();
-            if (config('app.passport_configs.use_mongo'))
-                $id = $oauth_client->_id;
-            else
-                $id = $oauth_client->id;
+            $id_secret = $this->getOauthClinetIDAndSecret();
             $request->request->add([
                 'grant_type' => 'password',
                 'scope' => '',
-                'client_id' => $id,
-                'client_secret' => $oauth_client->secret,
+                'client_id' => $id_secret[0],
+                'client_secret' => $id_secret[1],
                 'username' => $crc,
                 'password' => $request->input('password'),
             ]);
@@ -143,16 +171,12 @@ class ApiAuthController extends Controller
         }
         else
         {
-            $oauth_client = Client::where('password_client', true)->get()->first();
-            if (config('app.passport_configs.use_mongo'))
-                $id = $oauth_client->_id;
-            else
-                $id = $oauth_client->id;
+            $id_secret = $this->getOauthClinetIDAndSecret();
             $request->request->add([
                 'grant_type' => 'refresh_token',
                 'scope' => '',
-                'client_id' => $id,
-                'client_secret' => $oauth_client->secret,
+                'client_id' => $id_secret[0],
+                'client_secret' => $id_secret[1],
                 'refresh_token' => $data['refresh_token'],
             ]);
         }
@@ -181,6 +205,13 @@ class ApiAuthController extends Controller
 
     public function behave(Request $request)
     {
+        /*
+        passport token 验证需要查4次数据库，都是逐渐查询
+        DB query from mysql :: select * from `oauth_access_tokens` where `oauth_access_tokens`.`id` = ? limit 1
+        DB query from mysql :: select * from `users` where `id_crc64` = ? limit 1
+        DB query from mysql :: select * from `oauth_access_tokens` where `oauth_access_tokens`.`id` = ? limit 1
+        DB query from mysql :: select * from `oauth_clients` where `oauth_clients`.`id` = ? limit 1
+        */
         $user1 = \Auth::guard($_ENV["PASSPORT_GUARD"])->user();
         $user2 = $_ENV["CurrentUser"];
         $user3 = $request->user();
@@ -199,5 +230,7 @@ class ApiAuthController extends Controller
         $user2 = $_ENV["CurrentUser"];
         $user3 = $request->user();
         echo "behaveex @ " . $user1->name . ' ' . $user2->name . ' ' . $user3->name;
+        $user3->name = 'hahaex1';
+        $user3->save();
     }
 }
