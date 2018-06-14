@@ -11,6 +11,7 @@ use Laravel\Passport\Client;
 use Laravel\Passport\Token as AccessToken;
 use DB;
 use Redis;
+use DateTime;
 
 class ApiAuthController2 extends Controller
 {
@@ -62,6 +63,8 @@ class ApiAuthController2 extends Controller
                 'email' => $data['email'],
                 'name' => $data['name'],
                 'password' => bcrypt($data['password']),
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
             ]);
         }
         catch (QueryException $e)

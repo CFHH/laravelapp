@@ -47,6 +47,7 @@ trait CachableModel
                 }
                 else
                 {
+                    //var_dump(__CLASS__);
                     if(property_exists($obj , 'cache_expire_sceonds'))
                         $cache_expire_sceonds = $obj->cache_expire_sceonds;
                     else
@@ -60,6 +61,12 @@ trait CachableModel
                 }
             }
         }
+        /*
+        else if($method == 'create')
+        {
+            // 这种情况，会经过这里，然后调用__call
+        }
+        */
         else if($method == 'findNoCache')
         {
             $method = 'find';
@@ -92,6 +99,7 @@ trait CachableModel
                 }
                 else
                 {
+                    //var_dump(__CLASS__);
                     if(property_exists($obj , 'cache_expire_sceonds'))
                         $cache_expire_sceonds = $obj->cache_expire_sceonds;
                     else
@@ -105,6 +113,12 @@ trait CachableModel
                 }
             }
         }
+        /*
+        else if($method == 'create')
+        {
+            // 这种情况，会先调save，再调create
+        }
+        */
         else if($method == 'findNoCache')
         {
             $method = 'find';
@@ -114,6 +128,7 @@ trait CachableModel
 
     public function save(array $options = [])
     {
+        //var_dump(__CLASS__);
         $id = $this->attributes[$this->primaryKey];
         $key = static::getCacheKey($id);
         if(property_exists($this , 'cache_expire_sceonds'))
