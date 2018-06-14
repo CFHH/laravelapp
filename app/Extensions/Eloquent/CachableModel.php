@@ -52,9 +52,9 @@ trait CachableModel
                     else
                         $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
                     if ($cache_expire_sceonds > 0)
-                        Redis::setex($key, $cache_expire_sceonds, $obj->toJson());
+                        Redis::setex($key, $cache_expire_sceonds, $obj->toJsonEx());
                     else
-                        Redis::set($key, $obj->toJson());
+                        Redis::set($key, $obj->toJsonEx());
                     $obj->cache_flag = self::$CACHE_FLAG_NOW_CACHED;
                     return $obj;
                 }
@@ -97,9 +97,9 @@ trait CachableModel
                     else
                         $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
                     if ($cache_expire_sceonds > 0)
-                        Redis::setex($key, $cache_expire_sceonds, $obj->toJson());
+                        Redis::setex($key, $cache_expire_sceonds, $obj->toJsonEx());
                     else
-                        Redis::set($key, $obj->toJson());
+                        Redis::set($key, $obj->toJsonEx());
                     $obj->cache_flag = self::$CACHE_FLAG_NOW_CACHED;
                     return $obj;
                 }
@@ -121,9 +121,9 @@ trait CachableModel
         else
             $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
         if ($cache_expire_sceonds > 0)
-            Redis::setex($key, $cache_expire_sceonds, $this->toJson());
+            Redis::setex($key, $cache_expire_sceonds, $this->toJsonEx());
         else
-            Redis::set($key, $this->toJson());
+            Redis::set($key, $this->toJsonEx());
         return parent::save($options);
     }
 
@@ -133,5 +133,18 @@ trait CachableModel
         $key = static::getCacheKey($id);
         Redis::del($key);
         return parent::delete();
+    }
+
+    public function toJsonEx($options = 0)
+    {
+        $this->all_arrayable = true;
+        $json = json_encode($this->toArray(), $options);
+        $this->all_arrayable = false;
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw JsonEncodingException::forModel($this, json_last_error_msg());
+        }
+
+        return $json;
     }
 }

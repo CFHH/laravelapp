@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\JsonEncodingException;
 
 trait HasAttributes
 {
+    public $all_arrayable = false;
+
     /**
      * The model's attributes.
      *
@@ -286,6 +288,9 @@ trait HasAttributes
      */
     protected function getArrayableItems(array $values)
     {
+        if ($this->all_arrayable)
+            return $values;
+
         if (count($this->getVisible()) > 0) {
             $values = array_intersect_key($values, array_flip($this->getVisible()));
         }

@@ -195,7 +195,9 @@ class ApiAuthController2 extends Controller
         $user1 = \Auth::guard($_ENV["PASSPORT_GUARD"])->user();
         $user2 = $_ENV["CurrentUser"];
         $user3 = $request->user();
-        echo "behave @ " . $user1->name . ' ' . $user2->name . ' ' . $user3->name;
+        echo "behave @ " . $user1->name . ' ' . $user2->name . ' ' . $user3->name . '</br>';
+        echo $user3->toJson() . '</br>';
+        echo $user3->toJsonEx() . '</br>';
     }
 
     public function behave2(Request $request)

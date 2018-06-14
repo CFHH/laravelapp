@@ -14,7 +14,7 @@ class User extends Authenticatable
     protected $primaryKey = 'id_crc64';
     protected $keyType = 'int';  //如果主键是整数，mongo必须设置
     public $incrementing = false;
-    protected $cache_expire_sceonds = 86400;
+    protected $cache_expire_sceonds = 3600;
 
     /**
      * The attributes that are mass assignable.
@@ -41,7 +41,8 @@ class User extends Authenticatable
 
     public function findForPassport($username)
     {
-        return $this->where('id_crc64', $username)->first();
+        //return $this->where('id_crc64', $username)->first();
+        return $this->find($username);
     }
 
     /*
