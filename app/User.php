@@ -5,14 +5,16 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Extensions\Eloquent\CachableModel;  //use CachableModel
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens;
+    use Notifiable, HasApiTokens, CachableModel;
 
     protected $primaryKey = 'id_crc64';
     protected $keyType = 'int';  //如果主键是整数，mongo必须设置
     public $incrementing = false;
+    protected $cache_expire_sceonds = 86400;
 
     /**
      * The attributes that are mass assignable.

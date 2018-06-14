@@ -52,9 +52,13 @@ class EloquentUserProvider implements UserProvider
         if ($model->getKeyType() == 'int')
             $identifier = intval ($identifier);
 
+        /*BY ZZW
+        为了缓存，缓存只认主键查询
         return $model->newQuery()
             ->where($model->getAuthIdentifierName(), $identifier)
             ->first();
+        */
+        return $model->find($identifier);
     }
 
     /**

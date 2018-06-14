@@ -210,6 +210,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'CachableModel' => App\Extensions\Eloquent\CachableModel::class,
     ],
 
     'passport_configs' => [

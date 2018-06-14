@@ -3,9 +3,13 @@
 namespace Laravel\Passport;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Extensions\Eloquent\CachableModel;
 
 class Token extends Model
 {
+    use CachableModel;
+    protected $cache_expire_sceonds = 3600;
+
     /**
      * The database table used by the model.
      *
