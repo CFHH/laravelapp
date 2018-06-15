@@ -76,7 +76,9 @@ class ApiAuthController2 extends Controller
         }
         if ($user == NULL)
             return "内部错误";
-        return "成功创建" . $user->email;
+        echo "成功创建" . $user->email . '</br>';
+        echo 'cache flag = ' . $user->getCacheFlag() . '</br>';
+        var_dump($user);
     }
 
     public function login(Request $request)

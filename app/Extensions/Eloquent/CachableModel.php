@@ -10,7 +10,10 @@ trait CachableModel
 
     public static $CACHE_FLAG_NOCACHE = 0;
     public static $CACHE_FLAG_FROM_CACHE = 1;
-    public static $CACHE_FLAG_NOW_CACHED = 2;
+    public static $CACHE_FLAG_FROM_DB = 2;
+    public static $CACHE_FLAG_NEW = 4;
+    public static $CACHE_FLAG_UPDATE_CACHE = 8;
+    public static $CACHE_FLAG_DELETED = 16;
     protected $cache_flag = 0;
 
     public function getCacheFlag()
@@ -34,7 +37,6 @@ trait CachableModel
             Redis::setex($key, $cache_expire_sceonds, $obj->toJsonEx());
         else
             Redis::set($key, $obj->toJsonEx());
-        $obj->cache_flag = self::$CACHE_FLAG_NOW_CACHED;
     }
 
     public static function __callStatic($method, $parameters)
@@ -43,7 +45,7 @@ trait CachableModel
         {
             $key = static::getCacheKey($parameters[0]);
             $cache = Redis::get($key);
-            if (!is_null($cache))
+            if ($cache != null)
             {
                 $obj = new static(json_decode($cache, true));
                 $obj->syncOriginal();
@@ -54,28 +56,25 @@ trait CachableModel
             else
             {
                 $obj = (new static)->$method(...$parameters);
-                if (null == $obj)
+                if ($obj != null)
                 {
-                    return null;
-                }
-                else
-                {
-                    //var_dump(__CLASS__);
+                    //var_dump(__CLASS__ . '::__callStatic');
                     self::cacheObject($obj, $key);
-                    return $obj;
+                    $obj->cache_flag = self::$CACHE_FLAG_FROM_DB;
                 }
+                return $obj;
             }
         }
         /*
         else if($method == 'create')
         {
-            // 这种情况，会经过这里，然后调用__call
+            // Model::create()第1步，会经过这里，然后调用__call
+            //var_dump($parameters);
         }
         */
         else if($method == 'findNoCache')
         {
             $method = 'find';
-            return (new static)->$method(...$parameters);
         }
         return (new static)->$method(...$parameters);
     }
@@ -86,7 +85,7 @@ trait CachableModel
         {
             $key = static::getCacheKey($parameters[0]);
             $cache = Redis::get($key);
-            if (!is_null($cache))
+            if ($cache != null)
             {
                 $attributes =json_decode($cache, true);
                 $this->fill($attributes);
@@ -98,24 +97,29 @@ trait CachableModel
             else
             {
                 $obj = parent::__call($method, $parameters);
-                if (null == $obj)
+                if ($obj != null)
                 {
-                    return null;
-                }
-                else
-                {
-                    //var_dump(__CLASS__);
+                    //var_dump(__CLASS__ . '::__call');
                     self::cacheObject($obj, $key);
-                    return $obj;
+                    $obj->cache_flag = self::$CACHE_FLAG_FROM_DB;
                 }
+                return $obj;
             }
         }
-        /*
         else if($method == 'create')
         {
-            // 这种情况，会先调save，再调create
+            // Model::create()第2步，会经过这里，然后调用save
+            //var_dump($parameters);
+            $obj = parent::__call($method, $parameters);
+            if ($obj != null)
+            {
+                $id = $obj->attributes[$obj->primaryKey];
+                $key = static::getCacheKey($id);
+                self::cacheObject($obj, $key);
+                $obj->cache_flag = self::$CACHE_FLAG_NEW;
+            }
+            return $obj;
         }
-        */
         else if($method == 'findNoCache')
         {
             $method = 'find';
@@ -125,22 +129,37 @@ trait CachableModel
 
     public function save(array $options = [])
     {
-        //var_dump(__CLASS__);
-        if (array_key_exists($this->primaryKey, $this->attributes))
+        $exists = $this->exists;
+        $result = parent::save($options);
+        if ($exists && $result)
         {
+            //var_dump(__CLASS__ . '::save');
             $id = $this->attributes[$this->primaryKey];
             $key = static::getCacheKey($id);
             self::cacheObject($this, $key);
+            $this->cache_flag = $this->cache_flag | self::$CACHE_FLAG_UPDATE_CACHE;
         }
-        return parent::save($options);
+        /*
+        if (!$exists)
+        {
+            // Model::create()第3步，会经过这里
+            //var_dump($this);
+        }
+        */
+        return $result;
     }
 
     public function delete()
     {
-        $id = $this->attributes[$this->primaryKey];
-        $key = static::getCacheKey($id);
-        Redis::del($key);
-        return parent::delete();
+        $result = parent::delete();
+        if ($result)
+        {
+            $id = $this->attributes[$this->primaryKey];
+            $key = static::getCacheKey($id);
+            Redis::del($key);
+            $this->cache_flag = $this->cache_flag | self::$CACHE_FLAG_DELETED;
+        }
+        return $result;
     }
 
     public function toJsonEx($options = 0)
