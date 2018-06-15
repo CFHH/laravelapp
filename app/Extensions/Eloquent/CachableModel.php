@@ -24,6 +24,19 @@ trait CachableModel
         return "{$name}:{$id}";
     }
 
+    private static function cacheObject($obj, $key)
+    {
+        if(property_exists($obj , 'cache_expire_sceonds'))
+            $cache_expire_sceonds = $obj->cache_expire_sceonds;
+        else
+            $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
+        if ($cache_expire_sceonds > 0)
+            Redis::setex($key, $cache_expire_sceonds, $obj->toJsonEx());
+        else
+            Redis::set($key, $obj->toJsonEx());
+        $obj->cache_flag = self::$CACHE_FLAG_NOW_CACHED;
+    }
+
     public static function __callStatic($method, $parameters)
     {
         if ($method == 'find')
@@ -48,15 +61,7 @@ trait CachableModel
                 else
                 {
                     //var_dump(__CLASS__);
-                    if(property_exists($obj , 'cache_expire_sceonds'))
-                        $cache_expire_sceonds = $obj->cache_expire_sceonds;
-                    else
-                        $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
-                    if ($cache_expire_sceonds > 0)
-                        Redis::setex($key, $cache_expire_sceonds, $obj->toJsonEx());
-                    else
-                        Redis::set($key, $obj->toJsonEx());
-                    $obj->cache_flag = self::$CACHE_FLAG_NOW_CACHED;
+                    self::cacheObject($obj, $key);
                     return $obj;
                 }
             }
@@ -100,15 +105,7 @@ trait CachableModel
                 else
                 {
                     //var_dump(__CLASS__);
-                    if(property_exists($obj , 'cache_expire_sceonds'))
-                        $cache_expire_sceonds = $obj->cache_expire_sceonds;
-                    else
-                        $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
-                    if ($cache_expire_sceonds > 0)
-                        Redis::setex($key, $cache_expire_sceonds, $obj->toJsonEx());
-                    else
-                        Redis::set($key, $obj->toJsonEx());
-                    $obj->cache_flag = self::$CACHE_FLAG_NOW_CACHED;
+                    self::cacheObject($obj, $key);
                     return $obj;
                 }
             }
@@ -133,14 +130,7 @@ trait CachableModel
         {
             $id = $this->attributes[$this->primaryKey];
             $key = static::getCacheKey($id);
-            if(property_exists($this , 'cache_expire_sceonds'))
-                $cache_expire_sceonds = $this->cache_expire_sceonds;
-            else
-                $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
-            if ($cache_expire_sceonds > 0)
-                Redis::setex($key, $cache_expire_sceonds, $this->toJsonEx());
-            else
-                Redis::set($key, $this->toJsonEx());
+            self::cacheObject($this, $key);
         }
         return parent::save($options);
     }
