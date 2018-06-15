@@ -27,8 +27,8 @@ class CreateUsersTable extends Migration
         $sql = <<<EOT
 CREATE TABLE users (
     id_crc64 BIGINT PRIMARY KEY UNIQUE,
-    email VARCHAR(50),
-    name VARCHAR(20) NOT NULL,
+    email VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    name VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
     password VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

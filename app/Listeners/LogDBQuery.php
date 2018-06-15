@@ -27,6 +27,12 @@ class LogDBQuery
      */
     public function handle(QueryExecuted $event)
     {
+        /*
+        // DateTime，都用TimeStamp就好了
+        $sql = str_replace("?", "'%s'", $event->sql);
+        $log = 'DB query from ' . $event->connectionName . ' :: ' . vsprintf($sql, $event->bindings);
+        Log::info($log);
+        */
         if (config('app.debug'))
         {
             $sql = str_replace("?", "'%s'", $event->sql);
@@ -35,8 +41,8 @@ class LogDBQuery
             for ($i = 0; $i < $args_cnt; ++$i)
             {
                 $arg = $event->bindings[$i];
-                if (is_object($arg))  // DateTime，都用TimeStamp就好了
-                    $args[$i] = new Carbon($arg->format('Y-m-d H:i:s.u'), $arg->getTimezone());
+                if (is_object($arg))
+                    $args[$i] = $arg->format('Y-m-d H:i:s.u');  //new Carbon($arg->format('Y-m-d H:i:s.u'), $arg->getTimezone());
                 else
                     $args[$i] = $arg;
             }

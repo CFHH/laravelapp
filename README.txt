@@ -1,0 +1,2 @@
+默认数据库的字符集请设置为utf8mb4
+不要使用DateTime，用TimeStamp

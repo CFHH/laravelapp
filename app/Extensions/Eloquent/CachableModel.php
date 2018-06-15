@@ -129,16 +129,19 @@ trait CachableModel
     public function save(array $options = [])
     {
         //var_dump(__CLASS__);
-        $id = $this->attributes[$this->primaryKey];
-        $key = static::getCacheKey($id);
-        if(property_exists($this , 'cache_expire_sceonds'))
-            $cache_expire_sceonds = $this->cache_expire_sceonds;
-        else
-            $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
-        if ($cache_expire_sceonds > 0)
-            Redis::setex($key, $cache_expire_sceonds, $this->toJsonEx());
-        else
-            Redis::set($key, $this->toJsonEx());
+        if (array_key_exists($this->primaryKey, $this->attributes))
+        {
+            $id = $this->attributes[$this->primaryKey];
+            $key = static::getCacheKey($id);
+            if(property_exists($this , 'cache_expire_sceonds'))
+                $cache_expire_sceonds = $this->cache_expire_sceonds;
+            else
+                $cache_expire_sceonds = self::$DEFAULT_CACHE_EXPIRE_SECONDS;
+            if ($cache_expire_sceonds > 0)
+                Redis::setex($key, $cache_expire_sceonds, $this->toJsonEx());
+            else
+                Redis::set($key, $this->toJsonEx());
+        }
         return parent::save($options);
     }
 
