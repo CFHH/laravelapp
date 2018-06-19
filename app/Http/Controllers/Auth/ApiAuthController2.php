@@ -37,7 +37,7 @@ class ApiAuthController2 extends Controller
         }
     }
 
-    protected function register(Request $request)
+    public function register(Request $request)
     {
         $_ENV["PASSPORT_GUARD"] = "passport2";
         $data = $request->all();
@@ -91,11 +91,11 @@ class ApiAuthController2 extends Controller
         {
             $request->request->add([
                 'grant_type' => config('app.passport_configs.login_grant_type'),
+                'scope' => '',
                 'client_id' => config('app.passport_configs.client_id'),
                 'client_secret' => config('app.passport_configs.client_secret'),
                 'username' => $crc,
                 'password' => $request->input('password'),
-                'scope' => ''
             ]);
         }
         else
@@ -103,11 +103,11 @@ class ApiAuthController2 extends Controller
             $id_secret = $this->getOauthClinetIDAndSecret();
             $request->request->add([
                 'grant_type' => 'password',
+                'scope' => '',
                 'client_id' => $id_secret[0],
                 'client_secret' => $id_secret[1],
                 'username' => $crc,
                 'password' => $request->input('password'),
-                'scope' => ''
             ]);
         }
 
@@ -155,10 +155,10 @@ class ApiAuthController2 extends Controller
         {
             $request->request->add([
                 'grant_type' => config('app.passport_configs.refresh_grant_type'),
+                'scope' => '',
                 'client_id' => config('app.passport_configs.client_id'),
                 'client_secret' => config('app.passport_configs.client_secret'),
                 'refresh_token' => $data['refresh_token'],
-                'scope' => ''
             ]);
         }
         else
@@ -208,6 +208,6 @@ class ApiAuthController2 extends Controller
     public function behave2(Request $request)
     {
         $user = $request->user();
-        echo "behave @ " . $user->name;
+        echo "behave2 @ " . $user->name;
     }
 }

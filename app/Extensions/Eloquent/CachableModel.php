@@ -4,6 +4,9 @@ namespace App\Extensions\Eloquent;
 
 use Redis;
 
+/*
+    所有数据库表项，都应该在$fillable表里
+*/
 trait CachableModel
 {
     private static $DEFAULT_CACHE_EXPIRE_SECONDS = 3600;
@@ -21,7 +24,7 @@ trait CachableModel
         return $this->cache_flag;
     }
 
-    private static function getCacheKey($id)
+    public static function getCacheKey($id)
     {
         $name = str_replace('\\', ':', __CLASS__);
         return "{$name}:{$id}";
@@ -167,11 +170,9 @@ trait CachableModel
         $this->all_arrayable = true;
         $json = json_encode($this->toArray(), $options);
         $this->all_arrayable = false;
-
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw JsonEncodingException::forModel($this, json_last_error_msg());
         }
-
         return $json;
     }
 }
