@@ -197,10 +197,17 @@ class ApiAuthController extends Controller
     public function logout(Request $request)
     {
         $user = $_ENV["CurrentUser"];
-        //$user->token()->delete();  //这个只删除AccessToken
-        DB::table('oauth_access_tokens')
-            ->where('user_id', $user->id_crc64)
-            ->delete();
+        $userid = $user->attributes[$user->primaryKey];
+        $user_token_key = User::getAccessTokenCacheKey($userid);
+        $old_accesstoken_key = Redis::get($user_token_key);
+        if ($old_accesstoken_key != null)
+            Redis::del($old_accesstoken_key);
+
+        $token = $user->token();
+        if (! $token)
+            AccessToken::where('user_id', $user->id_crc64)->delete();
+        else
+            $token->delete();
         DB::table('oauth_refresh_tokens')
             ->where('user_id', $user->id_crc64)
             ->delete();
