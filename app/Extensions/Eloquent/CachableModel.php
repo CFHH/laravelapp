@@ -4,9 +4,15 @@ namespace App\Extensions\Eloquent;
 
 use Redis;
 
-/*
-    所有数据库表项，都应该在$fillable表里
-*/
+/**
+ * 缓存模型注意事项：
+ * 1、使用create()或save()来创建，都可以
+ * 2、尽量使用find()来查找；不用where()来build然后查找，这种方式不经过缓存
+ * 3、绝对不使用where来对缓存的表进行更新和删除，使用delete()、update()；如果你必须使用where来改和查，那么这所有的model就不可以缓存
+ * 4、在Model的$fillable里列出数据库表所有字段，否则无法从缓存恢复完整数据
+ * 5、Model的$cache_expire_sceonds，根据实际使用情景合理假设评估缓存时效
+ * 6、所有时间在PHP代码中指定，不由数据库自己设置，包括created_at和updated_at
+ */
 trait CachableModel
 {
     private static $DEFAULT_CACHE_EXPIRE_SECONDS = 3600;
