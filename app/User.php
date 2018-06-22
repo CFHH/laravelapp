@@ -71,7 +71,7 @@ class User extends Authenticatable
     
     static public function getAccessTokenCacheKey($userid)
     {
-        $name = 'User2AccessToken';
+        $name = 'UserToAccessToken';
         return "{$name}:{$userid}";
     }
 }

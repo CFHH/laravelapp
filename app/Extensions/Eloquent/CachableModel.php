@@ -109,20 +109,13 @@ trait CachableModel
                 return $obj;
             }
         }
+        /*
         else if($method == 'create')
         {
             // Model::create()第2步，会经过这里，然后调用save
             //var_dump($parameters);
-            $obj = parent::__call($method, $parameters);
-            if ($obj != null)
-            {
-                $id = $obj->attributes[$obj->primaryKey];
-                $key = static::getCacheKey($id);
-                self::cacheObject($obj, $key);
-                $obj->cache_flag = self::$CACHE_FLAG_NEW;
-            }
-            return $obj;
         }
+        */
         else if($method == 'findNoCache')
         {
             $method = 'find';
@@ -134,21 +127,24 @@ trait CachableModel
     {
         $exists = $this->exists;
         $result = parent::save($options);
-        if ($exists && $result)
+        if ($result)
         {
             //var_dump(__CLASS__ . '::save');
-            $id = $this->attributes[$this->primaryKey];
+            $id = $this->attributes[$this->primaryKey];  //通过save来创建，如果是自增主键，此处有主键了
             $key = static::getCacheKey($id);
             self::cacheObject($this, $key);
-            $this->cache_flag = $this->cache_flag | self::$CACHE_FLAG_UPDATE_CACHE;
+            if ($exists)
+            {
+                $this->cache_flag = $this->cache_flag | self::$CACHE_FLAG_UPDATE_CACHE;
+            }
+            else
+            {
+                // Model::create()第3步，会经过这里
+                // 通过save来创建，也是到这里
+                //var_dump($this);
+                $this->cache_flag = self::$CACHE_FLAG_NEW;
+            }
         }
-        /*
-        if (!$exists)
-        {
-            // Model::create()第3步，会经过这里
-            //var_dump($this);
-        }
-        */
         return $result;
     }
 

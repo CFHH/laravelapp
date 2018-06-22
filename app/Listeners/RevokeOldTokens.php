@@ -7,6 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Passport\Token as AccessToken;
 use App\User;
+use App\User2;
 use DB;
 use Redis;
 
@@ -29,7 +30,10 @@ class RevokeOldTokens
      */
     public function handle(AccessTokenCreated $event)
     {
-        $user_token_key = App\User::getAccessTokenCacheKey($event->userId);
+        if ($_ENV["PASSPORT_GUARD"] == "passport2")
+            $user_token_key = User2::getAccessTokenCacheKey($event->userId);
+        else
+            $user_token_key = User::getAccessTokenCacheKey($event->userId);
         $old_accesstoken_key = Redis::get($user_token_key);
         if ($old_accesstoken_key != null)
             Redis::del($old_accesstoken_key);

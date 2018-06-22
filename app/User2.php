@@ -51,4 +51,12 @@ class User2 extends Authenticatable
         //自定义密码验证
     }
     */
+
+    public const AccessTokenCacheKey_ExpireSceonds = 604800;
+    
+    static public function getAccessTokenCacheKey($userid)
+    {
+        $name = 'User2ToAccessToken';
+        return "{$name}:{$userid}";
+    }
 }
