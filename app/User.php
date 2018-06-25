@@ -21,9 +21,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'id_crc64', 'email', 'name', 'password', 'created_at', 'updated_at',
-    ];
+    //protected $fillable = ['id_crc64', 'email', 'name', 'password', 'created_at', 'updated_at',];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -41,7 +40,6 @@ class User extends Authenticatable
 
     public function findForPassport($username)
     {
-        //return $this->where('id_crc64', $username)->first();
         return $this->find($username);
     }
 
@@ -53,7 +51,7 @@ class User extends Authenticatable
     */
 
     public const AccessTokenCacheKey_ExpireSceonds = 604800;
-    
+
     static public function getAccessTokenCacheKey($userid)
     {
         $name = 'UserToAccessToken';

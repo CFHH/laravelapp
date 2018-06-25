@@ -74,7 +74,7 @@ class BearerTokenValidator implements AuthorizationValidatorInterface
             $data = new ValidationData(time());
 
             if ($token->validate($data) === false) {
-                //$this->logValidateError($jwt, $tokenm, $data);
+                //$this->logValidateError($jwt, $token, $data);
                 throw OAuthServerException::accessDenied('Access token is invalid');
             }
 
