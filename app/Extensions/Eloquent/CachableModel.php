@@ -218,14 +218,22 @@ trait CachableModel
 
     /*
     Model::destroy的实现是把模型全部从DB拉出来，然后删除，应该修改
-    App\Flight::destroy(1);
-    App\Flight::destroy([1, 2, 3]);
-    App\Flight::destroy(1, 2, 3);
+    Model::destroy(1);
+    Model::destroy([1, 2, 3]);
+    Model::destroy(1, 2, 3);
+    */
     public static function destroy($ids)
     {
-        return parent::destroy($ids);
+        $ids = is_array($ids) ? $ids : func_get_args();
+        $query_count = count($ids);
+        $key = ($instance = new static)->getKeyName();
+        $del_count = $instance->whereIn($key, $ids)->delete();
+        $redis_keys = [];
+        for ($i = 0; $i < $query_count; ++$i)
+            $redis_keys[] = static::getCacheKey($ids[$i]);
+        Redis::del($redis_keys);
+        return $del_count;
     }
-    */
 
     public function toJsonEx($options = 0)
     {
