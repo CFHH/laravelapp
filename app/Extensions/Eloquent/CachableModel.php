@@ -15,6 +15,7 @@ use Redis;
  */
 trait CachableModel
 {
+    private static $ENABLE_CACHE = true;
     private static $DEFAULT_CACHE_EXPIRE_SECONDS = 3600;
 
     public static $CACHE_FLAG_NOCACHE = 0;
@@ -75,6 +76,8 @@ trait CachableModel
     {
         if ($method == 'find')
         {
+            if (!self::$ENABLE_CACHE)
+                return parent::__call($method, $parameters);
             if (is_array($parameters[0]))
             {
                 $query_ids = $parameters[0];
@@ -182,7 +185,7 @@ trait CachableModel
     {
         $exists = $this->exists;
         $result = parent::save($options);
-        if ($result)
+        if ($result && self::$ENABLE_CACHE)
         {
             //var_dump(__CLASS__ . '::save');
             $id = $this->attributes[$this->primaryKey];  //通过save来创建，如果是自增主键，此处有主键了
@@ -206,7 +209,7 @@ trait CachableModel
     public function delete()
     {
         $result = parent::delete();
-        if ($result)
+        if ($result && self::$ENABLE_CACHE)
         {
             $id = $this->attributes[$this->primaryKey];
             $key = static::getCacheKey($id);
@@ -224,6 +227,8 @@ trait CachableModel
     */
     public static function destroy($ids)
     {
+        if (!self::$ENABLE_CACHE)
+            return parent::destroy($ids);
         $ids = is_array($ids) ? $ids : func_get_args();
         $query_count = count($ids);
         $key = ($instance = new static)->getKeyName();
