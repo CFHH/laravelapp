@@ -115,7 +115,7 @@ class VerifyPassportToken
     {
         $message = json_encode([
             'error' => [
-                'message' => 'TNO PASSPORT AUTH FOR USER.',
+                'message' => 'NO PASSPORT AUTH FOR USER.',
             ],
             'status_code' => 401,
         ]);

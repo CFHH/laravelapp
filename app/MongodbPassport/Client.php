@@ -3,9 +3,11 @@
 namespace App\MongodbPassport;
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use App\Extensions\Eloquent\CachableModel;
 
 class Client extends Model
 {
+    use CachableModel;
     /**
      * The database table used by the model.
      *

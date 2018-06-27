@@ -3,9 +3,11 @@
 namespace App\MongodbPassport;
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use App\Extensions\Eloquent\CachableModel;
 
 class Token extends Model
 {
+    use CachableModel;
     /**
      * The primary key for the model.
      *
